@@ -1,1 +1,129 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meet CERTIS</title><meta http-equiv="refresh" content="0;url=/#conversation"><link rel="stylesheet" href="/assets/styles.css"></head><body><main class="simple-page"><h1>Meet CERTIS.</h1><p><a href="/#conversation">Explore the public experience preview →</a></p></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111b24">
+<title>CERTIS | Guided Intelligence</title>
+<meta name="description" content="CERTIS Guided Intelligence from EnTrus Arts LLC. Ask a question and see what is known, inferred, uncertain, and worth watching next.">
+<style>
+:root{--paper:#f2f4f6;--ink:#182630;--muted:#647480;--line:#d5dde2;--accent:#4a858b;--dark:#111b24;--panel:#fbfcfd;--soft:#e6eef0;--warn:#8a642a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}button,input,textarea{font:inherit}a{color:inherit}
+.shell{min-height:100vh;display:grid;grid-template-rows:auto 1fr}.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 5%;border-bottom:1px solid var(--line);background:rgba(242,244,246,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:5}.brand{letter-spacing:.28em;font-weight:700;text-decoration:none}.status{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}.dot{width:8px;height:8px;border-radius:50%;background:#6a9e94;box-shadow:0 0 0 4px rgba(106,158,148,.12)}
+main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:end;padding:24px 0 30px}.eyebrow{font-size:11px;letter-spacing:.17em;font-weight:700;color:var(--accent);margin:0 0 12px}.intro h1{font-size:clamp(38px,5vw,68px);line-height:1.02;letter-spacing:-.05em;margin:0;font-weight:500}.intro h1 span{color:#547881}.intro p{color:var(--muted);max-width:520px;margin:0}.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:24px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px}.conversation{min-height:610px;display:grid;grid-template-rows:auto 1fr auto}.conversation-head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:center}.conversation-head h2,.signal-head h2{margin:0;font-size:17px}.mode{font-size:12px;color:var(--muted);background:var(--soft);padding:7px 10px;border-radius:999px}.transcript{padding:24px;overflow:auto;max-height:570px}.message{max-width:88%;margin:0 0 22px}.message.user{margin-left:auto;background:var(--dark);color:white;border-radius:14px 14px 4px 14px;padding:13px 15px}.certis-name{display:flex;gap:9px;align-items:center;font-size:11px;font-weight:700;letter-spacing:.12em;margin-bottom:10px}.mark{width:28px;height:28px;border:2px solid #688e97;border-right-color:transparent;border-radius:50%;position:relative}.mark:after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#688e97;right:-1px;top:10px}.certis-answer{font-size:18px;margin:0 0 18px}.reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.reason{border:1px solid var(--line);border-radius:10px;padding:13px;background:white}.reason small{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em;font-weight:700;margin-bottom:5px}.reason p{font-size:14px;margin:0}.composer{border-top:1px solid var(--line);padding:18px}.promptbar{display:grid;grid-template-columns:1fr auto;gap:10px}.promptbar textarea{resize:none;min-height:54px;max-height:150px;border:1px solid #bdc8ce;border-radius:10px;padding:13px;background:white;color:var(--ink)}.promptbar button{border:0;border-radius:10px;background:var(--dark);color:white;padding:0 20px;cursor:pointer;font-weight:600}.promptbar button:hover{background:#2b4c59}.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.examples button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 10px;color:var(--muted);cursor:pointer;font-size:12px}
+.side{display:grid;gap:24px;align-content:start}.signal-head{padding:20px 20px 12px}.signal-body{padding:0 20px 20px}.meter{height:8px;background:#e4e9ec;border-radius:999px;overflow:hidden;margin:10px 0 7px}.meter span{display:block;height:100%;width:0;background:#5a8f8b;transition:width .35s ease}.confidence{font-size:42px;line-height:1;font-weight:500;letter-spacing:-.04em}.confidence small{font-size:14px;color:var(--muted)}.signal-body p{color:var(--muted);font-size:14px}.list{list-style:none;padding:0;margin:0}.list li{padding:11px 0;border-top:1px solid var(--line);font-size:14px}.label{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em;font-weight:700;margin-bottom:2px}.boundary{padding:20px;background:var(--dark);color:#dce7ea;border-radius:14px}.boundary h3{margin:0 0 7px;font-size:15px}.boundary p{margin:0;color:#9fb0b8;font-size:13px}.boundary strong{color:white}.foot{margin-top:22px;color:var(--muted);font-size:12px}
+@media(max-width:850px){.intro,.grid{grid-template-columns:1fr}.conversation{min-height:540px}.transcript{max-height:none}.reason-grid{grid-template-columns:1fr}.topbar{padding:16px 4%}.status span:last-child{display:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+<a class="brand" href="/">CERTIS</a>
+<div class="status"><span class="dot" aria-hidden="true"></span><span>Guided intelligence active · evidence bridge visible</span></div>
+</header>
+<main>
+<section class="intro">
+<div><p class="eyebrow">GUIDED INTELLIGENCE</p><h1>Ask what matters.<br><span>See how CERTIS sees it.</span></h1></div>
+<p>CERTIS separates observation from inference, shows confidence instead of hiding uncertainty, and tells you what evidence would change the view.</p>
+</section>
+<div class="grid">
+<section class="card conversation" aria-label="CERTIS conversation">
+<div class="conversation-head"><h2>Conversation</h2><span class="mode" id="mode">Evidence-aware · local guided mode</span></div>
+<div class="transcript" id="transcript" aria-live="polite">
+<div class="message certis">
+<div class="certis-name"><span class="mark" aria-hidden="true"></span>CERTIS</div>
+<p class="certis-answer">I’m here. Give me a market, business question, pattern, or possibility. I’ll separate what is supported from what is only plausible.</p>
+<div class="reason-grid">
+<div class="reason"><small>WHAT I KNOW</small><p>This public experience can reason over its governed product rules and your question.</p></div>
+<div class="reason"><small>WHAT I DO NOT HAVE</small><p>A live authenticated market-evidence feed is not connected to this public shell yet.</p></div>
+<div class="reason"><small>HOW I HANDLE THAT</small><p>I lower confidence rather than filling missing evidence with certainty.</p></div>
+<div class="reason"><small>AUTHORITY</small><p>Decision support only. No trading, money movement, or autonomous financial action.</p></div>
+</div>
+</div>
+</div>
+<div class="composer">
+<div class="promptbar"><textarea id="prompt" aria-label="Ask CERTIS" placeholder="Ask CERTIS what you want to understand…"></textarea><button id="ask" type="button">Ask CERTIS</button></div>
+<div class="examples">
+<button type="button" data-q="What are you seeing that could matter to EnTrus Arts?">What could matter to EnTrus Arts?</button>
+<button type="button" data-q="How confident are you in that pattern?">How confident are you?</button>
+<button type="button" data-q="What would change your mind?">What would change your mind?</button>
+</div>
+</div>
+</section>
+<aside class="side">
+<section class="card">
+<div class="signal-head"><p class="eyebrow">CURRENT ASSESSMENT</p><h2>Evidence strength</h2></div>
+<div class="signal-body">
+<div class="confidence"><span id="score">0</span><small>/100</small></div>
+<div class="meter" aria-hidden="true"><span id="meter"></span></div>
+<p id="scoreText">No external evidence has been supplied for this conversation yet.</p>
+<ul class="list">
+<li><span class="label">STATE</span><span id="state">UNASSESSED</span></li>
+<li><span class="label">EVIDENCE</span><span id="evidence">Public evidence feed not connected</span></li>
+<li><span class="label">CONTRARY EVIDENCE</span><span id="contrary">Not evaluated</span></li>
+<li><span class="label">NEXT WATCH</span><span id="watch">Ask a question to establish the next condition to watch.</span></li>
+</ul>
+</div>
+</section>
+<div class="boundary"><h3>Authority boundary</h3><p>CERTIS may analyze, explain, compare, recognize possible patterns, and support human decisions. <strong>CERTIS has no financial execution authority.</strong></p></div>
+</aside>
+</div>
+<p class="foot">CERTIS · EnTrus Arts LLC · Guided Mode. Evidence strength is not the probability of an outcome. A 75+ score is required before this interface will label a pattern “supported.”</p>
+</main>
+</div>
+<script>
+const promptEl=document.getElementById('prompt');
+const ask=document.getElementById('ask');
+const transcript=document.getElementById('transcript');
+const scoreEl=document.getElementById('score');
+const meter=document.getElementById('meter');
+const scoreText=document.getElementById('scoreText');
+const stateEl=document.getElementById('state');
+const evidenceEl=document.getElementById('evidence');
+const contraryEl=document.getElementById('contrary');
+const watchEl=document.getElementById('watch');
+
+function esc(v){return v.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function classify(q){
+ const s=q.toLowerCase();
+ let score=18,state='INSUFFICIENT EVIDENCE',opening='I can frame the question, but I cannot honestly call a market pattern supported from this public shell alone.';
+ let observed='Your question is the only new input available in this session.';
+ let inference='A useful hypothesis can be formed, but it remains a hypothesis until evidence is connected or supplied.';
+ let contrary='No independent contrary evidence has been checked.';
+ let watch='Connect or provide dated evidence from multiple independent sources, then test whether the same pattern remains.';
+ if(/confidence|how sure|certain/.test(s)){
+   score=22; opening='My confidence should stay low until I can inspect current evidence. Confidence is earned by coverage, agreement, recency, and contradiction checks.';
+   inference='A numerical score without those inputs would be decoration, not intelligence.';
+   watch='Increase coverage first. Then recalculate confidence with contrary evidence included.';
+ } else if(/change your mind|challenge|wrong|contrary|invalidate/.test(s)){
+   score=26; opening='I should change my view when better evidence changes the structure of the case. A good intelligence system must be able to reverse itself.';
+   inference='The strongest challenge would be reliable evidence that breaks the assumed connection, shows a competing cause, or makes the signal no longer current.';
+   watch='Look for disconfirming evidence before looking for more confirming evidence.';
+ } else if(/entrus|opportun|business|product|market/.test(s)){
+   score=31; opening='I would look for a supported change first, then test whether it creates a practical opening for EnTrus Arts rather than jumping from trend to opportunity.';
+   inference='The useful pattern is not “something is popular.” It is a repeated change in demand, behavior, cost, access, or technology that maps to an EnTrus capability.';
+   watch='Watch for repetition across independent sources, customer behavior, practical fit, cost to act, and evidence that the opening persists.';
+ } else if(/bitcoin|btc|xrp|ethereum|eth|solana|sol|crypto|stock|equity|rate|inflation/.test(s)){
+   score=20; opening='I recognize the market domain, but I will not pretend I have a current price or live signal when this public session has no authenticated market feed.';
+   inference='Any directional claim right now would outrun the evidence available to this interface.';
+   watch='Connect current price, volume, macro context, timestamped sources, and contrary indicators before evaluating a pattern.';
+ }
+ return {score,state,opening,observed,inference,contrary,watch};
+}
+function render(q){
+ const r=classify(q);
+ transcript.insertAdjacentHTML('beforeend','<div class="message user">'+esc(q)+'</div>');
+ transcript.insertAdjacentHTML('beforeend','<div class="message certis"><div class="certis-name"><span class="mark" aria-hidden="true"></span>CERTIS</div><p class="certis-answer">'+r.opening+'</p><div class="reason-grid"><div class="reason"><small>OBSERVED</small><p>'+r.observed+'</p></div><div class="reason"><small>INFERENCE</small><p>'+r.inference+'</p></div><div class="reason"><small>CONTRARY EVIDENCE</small><p>'+r.contrary+'</p></div><div class="reason"><small>WHAT I’D WATCH NEXT</small><p>'+r.watch+'</p></div></div></div>');
+ scoreEl.textContent=r.score;meter.style.width=r.score+'%';stateEl.textContent=r.state;
+ scoreText.textContent=r.score>=75?'Evidence is strong enough for a supported-pattern label.':'Below the 75-point supported-pattern threshold.';
+ evidenceEl.textContent='External live evidence not connected in public Guided Mode';
+ contraryEl.textContent=r.contrary;watchEl.textContent=r.watch;
+ transcript.scrollTop=transcript.scrollHeight;
+}
+function submit(){const q=promptEl.value.trim();if(!q)return;render(q);promptEl.value='';promptEl.focus();}
+ask.addEventListener('click',submit);
+promptEl.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit();}});
+document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{promptEl.value=b.dataset.q;submit();}));
+</script>
+</body>
+</html>
