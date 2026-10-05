@@ -19,7 +19,7 @@ main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:gri
 <div class="shell">
 <header class="topbar">
 <a class="brand" href="/">CERTIS</a>
-<div class="status"><span class="dot" aria-hidden="true"></span><span>Guided intelligence active · evidence bridge visible</span></div>
+<div class="status"><span class="dot" aria-hidden="true"></span><span>Guided workspace · authenticated bridge pending</span></div>
 </header>
 <main>
 <section class="intro">
@@ -28,15 +28,15 @@ main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:gri
 </section>
 <div class="grid">
 <section class="card conversation" aria-label="CERTIS conversation">
-<div class="conversation-head"><h2>Conversation</h2><span class="mode" id="mode">Evidence-aware · local guided mode</span></div>
+<div class="conversation-head"><h2>Conversation</h2><span class="mode" id="mode">Evidence bridge · connection pending</span></div>
 <div class="transcript" id="transcript" aria-live="polite">
 <div class="message certis">
 <div class="certis-name"><span class="mark" aria-hidden="true"></span>CERTIS</div>
 <p class="certis-answer">I’m here. Give me a market, business question, pattern, or possibility. I’ll separate what is supported from what is only plausible.</p>
 <div class="reason-grid">
-<div class="reason"><small>WHAT I KNOW</small><p>This public experience can reason over its governed product rules and your question.</p></div>
+<div class="reason"><small>WHAT I KNOW</small><p>This workspace requests source-backed assessments through an authenticated bridge.</p></div>
 <div class="reason"><small>WHAT I DO NOT HAVE</small><p>A live authenticated market-evidence feed is not connected to this public shell yet.</p></div>
-<div class="reason"><small>HOW I HANDLE THAT</small><p>I lower confidence rather than filling missing evidence with certainty.</p></div>
+<div class="reason"><small>HOW I HANDLE THAT</small><p>Without validated evidence, this workspace stays unassessed at zero.</p></div>
 <div class="reason"><small>AUTHORITY</small><p>Decision support only. No trading, money movement, or autonomous financial action.</p></div>
 </div>
 </div>
@@ -68,62 +68,10 @@ main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:gri
 <div class="boundary"><h3>Authority boundary</h3><p>CERTIS may analyze, explain, compare, recognize possible patterns, and support human decisions. <strong>CERTIS has no financial execution authority.</strong></p></div>
 </aside>
 </div>
-<p class="foot">CERTIS · EnTrus Arts LLC · Guided Mode. Evidence strength is not the probability of an outcome. A 75+ score is required before this interface will label a pattern “supported.”</p>
+<p class="foot">CERTIS · EnTrus Arts LLC · Guided Mode. Evidence strength is not the probability of an outcome. The server requires 75+ evidence strength before accepting a supported assessment.</p>
 </main>
 </div>
-<script>
-const promptEl=document.getElementById('prompt');
-const ask=document.getElementById('ask');
-const transcript=document.getElementById('transcript');
-const scoreEl=document.getElementById('score');
-const meter=document.getElementById('meter');
-const scoreText=document.getElementById('scoreText');
-const stateEl=document.getElementById('state');
-const evidenceEl=document.getElementById('evidence');
-const contraryEl=document.getElementById('contrary');
-const watchEl=document.getElementById('watch');
-
-function esc(v){return v.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
-function classify(q){
- const s=q.toLowerCase();
- let score=18,state='INSUFFICIENT EVIDENCE',opening='I can frame the question, but I cannot honestly call a market pattern supported from this public shell alone.';
- let observed='Your question is the only new input available in this session.';
- let inference='A useful hypothesis can be formed, but it remains a hypothesis until evidence is connected or supplied.';
- let contrary='No independent contrary evidence has been checked.';
- let watch='Connect or provide dated evidence from multiple independent sources, then test whether the same pattern remains.';
- if(/confidence|how sure|certain/.test(s)){
-   score=22; opening='My confidence should stay low until I can inspect current evidence. Confidence is earned by coverage, agreement, recency, and contradiction checks.';
-   inference='A numerical score without those inputs would be decoration, not intelligence.';
-   watch='Increase coverage first. Then recalculate confidence with contrary evidence included.';
- } else if(/change your mind|challenge|wrong|contrary|invalidate/.test(s)){
-   score=26; opening='I should change my view when better evidence changes the structure of the case. A good intelligence system must be able to reverse itself.';
-   inference='The strongest challenge would be reliable evidence that breaks the assumed connection, shows a competing cause, or makes the signal no longer current.';
-   watch='Look for disconfirming evidence before looking for more confirming evidence.';
- } else if(/entrus|opportun|business|product|market/.test(s)){
-   score=31; opening='I would look for a supported change first, then test whether it creates a practical opening for EnTrus Arts rather than jumping from trend to opportunity.';
-   inference='The useful pattern is not “something is popular.” It is a repeated change in demand, behavior, cost, access, or technology that maps to an EnTrus capability.';
-   watch='Watch for repetition across independent sources, customer behavior, practical fit, cost to act, and evidence that the opening persists.';
- } else if(/bitcoin|btc|xrp|ethereum|eth|solana|sol|crypto|stock|equity|rate|inflation/.test(s)){
-   score=20; opening='I recognize the market domain, but I will not pretend I have a current price or live signal when this public session has no authenticated market feed.';
-   inference='Any directional claim right now would outrun the evidence available to this interface.';
-   watch='Connect current price, volume, macro context, timestamped sources, and contrary indicators before evaluating a pattern.';
- }
- return {score,state,opening,observed,inference,contrary,watch};
-}
-function render(q){
- const r=classify(q);
- transcript.insertAdjacentHTML('beforeend','<div class="message user">'+esc(q)+'</div>');
- transcript.insertAdjacentHTML('beforeend','<div class="message certis"><div class="certis-name"><span class="mark" aria-hidden="true"></span>CERTIS</div><p class="certis-answer">'+r.opening+'</p><div class="reason-grid"><div class="reason"><small>OBSERVED</small><p>'+r.observed+'</p></div><div class="reason"><small>INFERENCE</small><p>'+r.inference+'</p></div><div class="reason"><small>CONTRARY EVIDENCE</small><p>'+r.contrary+'</p></div><div class="reason"><small>WHAT I’D WATCH NEXT</small><p>'+r.watch+'</p></div></div></div>');
- scoreEl.textContent=r.score;meter.style.width=r.score+'%';stateEl.textContent=r.state;
- scoreText.textContent=r.score>=75?'Evidence is strong enough for a supported-pattern label.':'Below the 75-point supported-pattern threshold.';
- evidenceEl.textContent='External live evidence not connected in public Guided Mode';
- contraryEl.textContent=r.contrary;watchEl.textContent=r.watch;
- transcript.scrollTop=transcript.scrollHeight;
-}
-function submit(){const q=promptEl.value.trim();if(!q)return;render(q);promptEl.value='';promptEl.focus();}
-ask.addEventListener('click',submit);
-promptEl.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit();}});
-document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{promptEl.value=b.dataset.q;submit();}));
-</script>
+<script src="/app/bridge-client.js" defer></script>
 </body>
 </html>
+
