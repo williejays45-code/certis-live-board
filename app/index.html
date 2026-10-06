@@ -41,7 +41,7 @@ main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:gri
 </div>
 </div>
 </div>
-<div class="composer">
+<div class="composer"><form action="/auth/login" method="post"><button type="submit">Sign in with Google</button></form><form action="/auth/logout" method="post"><button type="submit">Sign out of CERTIS</button></form>
 <div class="promptbar"><textarea id="prompt" aria-label="Ask CERTIS" placeholder="Ask CERTIS what you want to understand…"></textarea><button id="ask" type="button">Ask CERTIS</button></div>
 <div class="examples">
 <button type="button" data-q="What are you seeing that could matter to EnTrus Arts?">What could matter to EnTrus Arts?</button>
@@ -74,4 +74,5 @@ main{width:min(1280px,92vw);margin:0 auto;padding:34px 0 60px}.intro{display:gri
 <script src="/app/bridge-client.js" defer></script>
 </body>
 </html>
+
 

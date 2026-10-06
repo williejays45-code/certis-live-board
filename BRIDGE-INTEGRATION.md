@@ -4,7 +4,7 @@ Source anchor: certis-live-board commit 71f4bff4654eb2655bf1d984a3ee8cb2dcb21fd3
 
 User-confirmed recorded hosting service: Render / certis-live-board. Account ownership remains unverified. No existing CERTIS sign-in service is verified. These are integration prerequisites, not reasons to reopen completed runtime/package gates.
 
-This is a reviewable candidate, not a connected or authenticated deployment. It does not modify the sealed v3.22.7 runtime, its controls, or databases. No external model calls or financial actions occur.
+This is a reviewable candidate, not a connected or authenticated deployment. It does not modify the sealed v3.22.7 runtime, its controls, or databases. No external model calls or financial actions occur. The backend extension adds a runnable HTTP service, Google OIDC login, Redis-backed sessions and an atomic shared limiter. Configuration is disabled by default; see RENDER-SETUP.md.
 
 ## Implemented
 
@@ -19,15 +19,15 @@ The candidate app sends only to its same-origin bridge, displays clear unavailab
 ## Required before live connection
 
 1. Confirm the actual CERTIS hosting service and backend routing. A static host will not execute this module; there is deliberately no claimed production API route yet.
-2. Bind an existing vetted session implementation through `verifySession`. Require Secure, HttpOnly, SameSite cookies; verify issuer, audience, expiry and revocation; rotate sessions at sign-in. Return stable opaque subject IDs and server-side roles. An email address or client-supplied mode never grants founder authority. No login or credential issuance is implemented here.
-3. Supply an atomic shared limiter through `consumeRateLimit`, plus ingress limits/timeouts. The unit tests use fakes, not a production limiter or authentication system.
+2. Configure and acceptance-test the Google Web OAuth client and Redis session store. The implementation uses openid-client for signature/issuer/audience/expiry/state/nonce/PKCE verification and Secure, HttpOnly, SameSite cookies. Sessions rotate at login and are revoked at website logout. Website sessions grant no protected founder role. Google account revocation does not proactively invalidate website sessions; website session revocation or their one-hour expiry is required.
+3. Acceptance-test Redis GETDEL/EVAL, session persistence and the shared limiter across real workers, plus ingress limits/timeouts. Redis tests currently use a fake store; the OIDC protocol tests use the real library with locally signed synthetic responses. No real Google sign-in has occurred.
 4. Implement an authenticated, read-only, timeout-bounded `queryEvidence` adapter. Scope every conversation lookup to principal ID; verify access before reading founder context. Pass only approved public evidence for public mode. Define evidence freshness per data class and a documented scoring model. Do not rely on request timestamps for source freshness.
 5. The v3.22.7 standalone runtime rejects forwarded traffic. Do not remove/strip forwarding headers or relay external traffic as local to bypass that boundary. Runtime integration requires its separately reviewed authenticated interface.
 6. Verify real login/logout, expiry/revocation, cross-user conversation isolation, persistent limiter behavior, export sanitization, backend outage, and hosting route behavior before deployment. Existing package verification gates remain closed.
 
 ## Validation
 
-Run `node --test bridge/query.test.mjs app/bridge-client.test.mjs` with Node 22 or later. Tests are synthetic and require no secrets, outbound network, protected state or listening process. There are no third-party dependencies. Browser-based founder acceptance and real identity-provider tests remain pending until adapters are bound.
+Run `npm ci --ignore-scripts` then `npm test` with Node 24. The complete 89-test suite uses synthetic evidence, a fake Redis store, and the real OpenID library with synthetic signed tokens. One smoke test launches a disposable disabled-auth HTTP process on a random loopback port and stops it. Tests need no real credentials, external authentication/model calls or protected state. Dependencies are pinned in package-lock.json. The npm audit returned zero known vulnerabilities at verification time. Browser-based acceptance, real Redis operations and real identity-provider tests remain pending.
 
 ## Rollback and authority
 
