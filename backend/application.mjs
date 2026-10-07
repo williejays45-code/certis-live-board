@@ -1,3 +1,4 @@
+import {diagnosticLine} from './auth-diagnostics.mjs';
 import {createQueryHandler} from '../bridge/query.mjs';
 import {SESSION_COOKIE,LOGIN_COOKIE,cookie,readCookie} from './security.mjs';
 function response(status,body,headers={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff',...headers}});}
@@ -29,7 +30,7 @@ export function createApplication({config,store,oidc}={}){
         const tx=await store.consumeTransaction(id);
         if(!tx)return error(401,'LOGIN_EXPIRED_OR_REPLAYED');
         let principal;
-        try{principal=await oidc.complete(url,tx);}catch{return response(401,{error:{code:'SIGN_IN_REJECTED'}},{'Set-Cookie':cookie(LOGIN_COOKIE,'',0)});}
+        try{principal=await oidc.complete(url,tx);}catch(error){console.warn(diagnosticLine(error));return response(401,{error:{code:'SIGN_IN_REJECTED'}},{'Set-Cookie':cookie(LOGIN_COOKIE,'',0)});}
         await store.revoke(readCookie(request,SESSION_COOKIE));
         const sessionId=await store.issue(principal);
         const result=response(303,{}, {'Location':config.origin+'/app/'});

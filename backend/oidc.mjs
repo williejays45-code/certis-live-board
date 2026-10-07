@@ -1,3 +1,4 @@
+import {diagnosticFailure} from './auth-diagnostics.mjs';
 import * as oidc from 'openid-client';
 import {ISSUER,principalFromClaims} from './security.mjs';
 
@@ -18,8 +19,11 @@ export function authenticationWithClient(config,client){
     },
     async complete(url,transaction){
       // The library validates state, nonce, PKCE, issuer, audience, signature and expiry.
-      const tokens=await oidc.authorizationCodeGrant(client,url,{pkceCodeVerifier:transaction.verifier,expectedState:transaction.state,expectedNonce:transaction.nonce,idTokenExpected:true});
-      return principalFromClaims(tokens.claims(),config.allowedEmail);
+      let tokens;
+      try { tokens=await oidc.authorizationCodeGrant(client,url,{pkceCodeVerifier:transaction.verifier,expectedState:transaction.state,expectedNonce:transaction.nonce,idTokenExpected:true}); }
+      catch(error) { throw diagnosticFailure('exchange',error); }
+      try { return principalFromClaims(tokens.claims(),config.allowedEmail); }
+      catch(error) { throw diagnosticFailure('account',error); }
       // Access/refresh/ID tokens are never stored in the browser or session store.
     }
   };
