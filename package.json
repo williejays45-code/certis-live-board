@@ -1,0 +1,17 @@
+{
+  "name": "certis-protected-bridge-candidate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "test": "node --test bridge/query.test.mjs app/bridge-client.test.mjs backend/*.test.mjs"
+  },
+  "dependencies": {
+    "openid-client": "6.8.8",
+    "redis": "6.3.0"
+  }
+}
