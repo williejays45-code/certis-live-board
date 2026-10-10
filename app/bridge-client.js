@@ -12,7 +12,8 @@
   function reset() {
     el('score').textContent='0';el('meter').style.width='0%';el('state').textContent='UNASSESSED';
     el('scoreText').textContent='No validated evidence assessment is available.';
-    el('evidence').textContent='Authenticated evidence bridge not connected';
+    el('evidence').textContent='No current evidence response';
+    if(el('mode'))el('mode').textContent='Awaiting an evidence response';
     el('contrary').textContent='Not evaluated';el('watch').textContent='Connect and verify dated evidence.';
   }
   async function submit() {
@@ -38,7 +39,8 @@
       for(const source of result.sources){const p=document.createElement('p');p.textContent='Source: '+source.label+' · '+source.uri+' · checked '+source.checked_at;node.appendChild(p);}
       el('score').textContent=String(a.evidence_strength);el('meter').style.width=a.evidence_strength+'%';el('state').textContent=a.state;
       el('scoreText').textContent='Evidence strength, not probability of an outcome.';
-      el('evidence').textContent=result.sources.length+' dated sources';el('contrary').textContent=a.contrary_evidence.join(' · ')||'None supplied';el('watch').textContent=a.next_watch.join(' · ');
+      el('evidence').textContent=result.sources.length+' dated '+(result.sources.length===1?'source':'sources');el('contrary').textContent=a.contrary_evidence.join(' · ')||'None supplied';el('watch').textContent=a.next_watch.join(' · ');
+      if(el('mode'))el('mode').textContent=result.sources.length?'Dated public observations received':'No fresh evidence available';
     } catch(error) {reset();message(error.name==='TimeoutError'?'The bridge timed out. No assessment was made.':error.message);}
     finally {pending=false;button.disabled=false;prompt.focus();}
   }
