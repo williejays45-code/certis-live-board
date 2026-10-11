@@ -29,7 +29,7 @@
     }
     if(result.engine){
       const e=result.engine;
-      if(e.version!=='3.22.7'||e.adapter!=='certis-public-engine-export/1'||e.scope!=='public_quote_checks'||e.assessment_complete!==false||e.score_model!==null||a.state!=='INSUFFICIENT_EVIDENCE'||a.evidence_strength!==0||!Array.isArray(e.checks)||!e.checks.length||e.checks.length>4||e.checks.length!==result.sources.length)throw Error('INVALID_ENGINE');
+      if(!['3.22.7','3.24.0'].includes(e.version)||e.adapter!=='certis-public-engine-export/1'||e.scope!=='public_quote_checks'||e.assessment_complete!==false||e.score_model!==null||a.state!=='INSUFFICIENT_EVIDENCE'||a.evidence_strength!==0||!Array.isArray(e.checks)||!e.checks.length||e.checks.length>4||e.checks.length!==result.sources.length)throw Error('INVALID_ENGINE');
       if(new Set(e.checks.map(c=>c?.asset)).size!==e.checks.length)throw Error('INVALID_ENGINE');
       for(const c of e.checks)if(!c||!['btc','eth','xrp','sol'].includes(c.asset)||c.passed!==true||c.policy_version!=='certis-reasoning-control/1.0'||!fresh(c.evaluated_at)||!stringList(c.required_evidence)||!c.required_evidence.every(k=>Object.hasOwn(requirementLabels,k)))throw Error('INVALID_ENGINE');
     }
