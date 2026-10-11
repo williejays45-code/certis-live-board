@@ -5,7 +5,7 @@ import {projectEngine,routeQuestion,areaGaps} from './engine-evidence.mjs';
 import {unavailable} from '../bridge/query.mjs';
 function response(status,body,headers={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff',...headers}});}
 const error=(status,code)=>response(status,{error:{code}});
-export function createApplication({config,store,oidc,evidence,intelligence,engineRequests}={}){
+export function createApplication({config,store,oidc,evidence,intelligence,engineRequests,publicReviews}={}){
   const active=config.enabled && !!store && !!oidc;
   const query=createQueryHandler(active?{
     verifySession:request=>store.session(readCookie(request,SESSION_COOKIE)),
@@ -25,6 +25,8 @@ export function createApplication({config,store,oidc,evidence,intelligence,engin
     const url=new URL(request.url);
     if(url.origin!==config.origin)return error(403,'ORIGIN_DENIED');
     const path=url.pathname;
+    if(path==='/api/certis/query'&&url.searchParams.get('public_review')==='1')return active&&publicReviews?publicReviews.browser(request):error(503,'PUBLIC_REVIEWS_NOT_CONFIGURED');
+    if(path==='/internal/public-review/claim'||path==='/internal/public-review/complete')return active&&publicReviews?publicReviews.machine(request):error(503,'PUBLIC_REVIEWS_NOT_CONFIGURED');
     if(path==='/api/certis/query'&&url.searchParams.get('engine_request')==='1')return active&&engineRequests?engineRequests.browser(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
     if(path==='/internal/public-engine/claim'||path==='/internal/public-engine/complete')return active&&engineRequests?engineRequests.machine(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
     if(path==='/internal/public-evidence')return evidence?evidence.ingest(request):error(503,'EXPORT_NOT_CONFIGURED');
