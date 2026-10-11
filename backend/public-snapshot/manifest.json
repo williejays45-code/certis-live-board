@@ -1,0 +1,10 @@
+{
+  "schema": "certis-public-snapshot-set/1",
+  "snapshots": {
+    "treasury-2026": "5fb0a0dc4f4c0925e1bc823da65ce3b4a0547ba43baf226710ae981e749336d1",
+    "bls-cpi": "9e20892ba7ca591eeeeb2ca0d926bd2ffa2eb9a7892d40b47b91cd6f269125be",
+    "census-cbp-2023": "351ec162c7575907d8e0be79e93013ffb4b69f7b24c80ba1f6d3ad2de9a6f977",
+    "dallas-matrix": "7ef89c3b05e004fce047e62d5e8f7a3c202eaad1e79112107c6532e77941cf18",
+    "landitrus-dcad": "42751fa4d37f8f657407f88257a52bffde1d1d7f81401287857887d16d1103d8"
+  }
+}
