@@ -4,6 +4,7 @@ import {configuration,SecurityStore} from './security.mjs';
 import {googleAuthentication} from './oidc.mjs';
 import {createApplication} from './application.mjs';
 import {createPublicEvidence} from './public-evidence.mjs';
+import {createEngineEvidence} from './engine-evidence.mjs';
 
 const config=configuration(process.env);
 let redis,store,oidc;
@@ -16,7 +17,8 @@ if(config.enabled){
 }
 const evidence=process.env.CERTIS_PUBLIC_EXPORT_ENABLED==='true'
   ?createPublicEvidence({redis,tokenSha256:process.env.CERTIS_EXPORT_TOKEN_SHA256}):undefined;
-const application=createApplication({config,store,oidc,evidence});
+const intelligence=evidence?createEngineEvidence({redis,tokenSha256:process.env.CERTIS_EXPORT_TOKEN_SHA256}):undefined;
+const application=createApplication({config,store,oidc,evidence,intelligence});
 const server=http.createServer(async(req,res)=>{
   try{
     if(!req.url?.startsWith('/')||req.url.startsWith('//')||req.url.length>8192){res.writeHead(400);res.end();return;}

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {unavailable} from '../bridge/query.mjs';
+import {projectEngine} from '../backend/engine-evidence.mjs';
 const source=readFileSync(new URL('./bridge-client.js',import.meta.url),'utf8');
 function harness(fetcher) {
  const nodes=new Map();
@@ -21,3 +22,8 @@ test('server score below 75 cannot display supported',async()=>{const v=unavaila
 test('response cannot expand authority',async()=>{const v=unavailable();v.authority.trading=true;const h=harness(async()=>Response.json(v));await h.submit('Synthetic');assert.equal(h.get('state').textContent,'UNASSESSED');assert.match(h.rendered(),/authority boundary/);});
 test('network rejection clears evidence',async()=>{const h=harness(async()=>{throw Error('Unavailable');});await h.submit('Synthetic');assert.equal(h.get('score').textContent,'0');assert.equal(h.get('ask').disabled,false);});
 test('duplicate submit while pending does not issue duplicate query',async()=>{let release;const h=harness(()=>new Promise(r=>release=r));const pending=h.submit('First');await h.submit('Second');assert.equal(h.calls.length,1);release(Response.json(unavailable()));await pending;});
+
+function checked(){const time=new Date(Date.now()-1000).toISOString();return projectEngine({quotes:[{asset:'btc',observed_at:time,last:'101.5',bid:'100',ask:'102'}],analyses:[{asset:'btc',evaluated_at:time,evaluation:{policy_version:'certis-reasoning-control/1.0'},plan:{state:'ready_for_safe_acquisition',required_evidence:['digital-asset-registry-profile','active-contradiction-state']}}]},'BTC');}
+test('engine calculation and meaningful research labels render without a score upgrade',async()=>{const h=harness(async()=>Response.json(checked()));await h.submit('BTC');assert.equal(h.get('state').textContent,'INSUFFICIENT_EVIDENCE');assert.equal(h.get('score').textContent,'0');assert.match(h.rendered(),/1\.980198/);assert.match(h.rendered(),/Review contradictory evidence/);assert.match(h.get('scoreText').textContent,/Unscored/);});
+test('stale engine check clears the previous result',async()=>{const v=checked();v.engine.checks[0].evaluated_at=new Date(Date.now()-600000).toISOString();const h=harness(async()=>Response.json(v));await h.submit('BTC');assert.equal(h.get('state').textContent,'UNASSESSED');});
+test('engine check cannot pretend a completed assessment',async()=>{const v=checked();v.engine.assessment_complete=true;const h=harness(async()=>Response.json(v));await h.submit('BTC');assert.equal(h.get('state').textContent,'UNASSESSED');});
