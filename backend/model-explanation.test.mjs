@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {validateModelExplanation} from './model-explanation.mjs';
+import {projectReview,MANIFEST_SHA,snapshots,DOMAINS} from './public-reviews.mjs';
+const ids=DOMAINS.business.flatMap(k=>snapshots[k].observations.map(o=>o.evidence_id));
+const model=()=>({status:'accepted',provider_called:true,financial_action_authority:'none',contract:'certis-generative-reasoning/1.4-candidate.2',model:'gpt-5.6-terra',authoritative:false,requires_human_review:true,assertions:[{statement:'Historical records do not establish current conditions.',assertion_class:'unknown',evidence_ids:ids,confidence:'low'}],missing_evidence:['Independent verification required.'],alternative_hypotheses:[],unresolved_conflicts:[],next_steps:['human_review']});
+test('accepted explanation is separate from governed score and sources',()=>{
+ const now=Date.parse('2026-10-11T22:00:00Z'),job={id:'a'.repeat(48),domain:'business',caseKey:'b'.repeat(64),claimedAt:now};
+ const v={schema:'certis-public-review-export/2',runtime_version:'3.24.0',domain:job.domain,case_key:job.caseKey,case_id:'case-'+'c'.repeat(32),request_id:'web-'+job.id,generated_at:new Date(now).toISOString(),manifest_sha256:MANIFEST_SHA,evidence_ids:ids,reasoning_passed:true,financial_action_authority:'none',private_context:false,external_model_calls:true,model_explanation:model()};
+ const r=projectReview(v,job,now);assert.equal(r.evidence_strength,null);assert.equal(r.assessment_state,'not_supported');assert.equal(r.provider_called,true);assert.equal(r.sources[0].observation_date,'2023-12-31');assert.equal(r.model_explanation.authoritative,false);
+});
+for(const [name,edit] of Object.entries({unknownCitation:m=>m.assertions[0].evidence_ids=['private'],incompleteCoverage:m=>m.assertions[0].evidence_ids=[ids[0]],authority:m=>m.financial_action_authority='trade',extraPrivateField:m=>m.customer='private',conflictProse:m=>m.unresolved_conflicts=['made up'],badModel:m=>m.model='other',noReview:m=>m.requires_human_review=false}))test('rejects '+name,()=>{const m=model();edit(m);assert.throws(()=>validateModelExplanation(m,ids));});
+test('bounded fallback preserves whether a call occurred',()=>{for(const provider_called of [false,true])assert.deepEqual(validateModelExplanation({status:'unavailable',provider_called,financial_action_authority:'none'},ids),{status:'unavailable',provider_called,financial_action_authority:'none'});});

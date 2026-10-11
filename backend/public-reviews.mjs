@@ -1,3 +1,4 @@
+import {validateModelExplanation} from './model-explanation.mjs';
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {readCookie,SESSION_COOKIE} from './security.mjs';
@@ -41,6 +42,9 @@ function freshness(source,now){
  if(now-Date.parse(source.retrieved_at)>86400000)return 'refresh_due';return 'within_review_window';
 }
 export function projectReview(value,job,now){
+ const model=value?.schema==='certis-public-review-export/2'?value.model_explanation:undefined;
+ if(model!==undefined){if(!exact(value,['schema','runtime_version','domain','case_key','case_id','request_id','generated_at','manifest_sha256','evidence_ids','reasoning_passed','financial_action_authority','private_context','external_model_calls','model_explanation'])||!['business','traditional_finance'].includes(value.domain)||value.external_model_calls!==model.provider_called)throw Error('REVIEW_SCOPE');value={...value,schema:'certis-public-review-export/1',external_model_calls:false};delete value.model_explanation;}
+
  if(!exact(value,['schema','runtime_version','domain','case_key','case_id','request_id','generated_at','manifest_sha256','evidence_ids','reasoning_passed','financial_action_authority','private_context','external_model_calls'])||value.schema!=='certis-public-review-export/1'||value.runtime_version!=='3.24.0'||value.domain!==job.domain||value.case_key!==job.caseKey||!/^case-[a-f0-9]{32}$/.test(value.case_id)||value.request_id!=='web-'+job.id||value.manifest_sha256!==MANIFEST_SHA||value.reasoning_passed!==true||value.financial_action_authority!=='none'||value.private_context!==false||value.external_model_calls!==false)throw Error('REVIEW_SCOPE');
  const time=Date.parse(value.generated_at);if(typeof value.generated_at!=='string'||!Number.isFinite(time)||time<job.claimedAt||time>now+5000||now-time>210000)throw Error('REVIEW_TIME');
  const selected=DOMAINS[job.domain].map(k=>snapshots[k]);
@@ -53,7 +57,7 @@ export function projectReview(value,job,now){
  missing_evidence:['Independent corroboration and a defensible assessment score remain unestablished.',...sources.flatMap(s=>s.limitations)],
  next_watch:['Refresh sources when due and acquire independent evidence before drawing a financial conclusion.'],
  evaluation_scope:'Reference and authority checks passed; this does not establish truth, independence, or a 75-point assessment.',
- financial_action_authority:'none',provider_called:false,private_context:false};
+ financial_action_authority:'none',provider_called:model?model.provider_called:false,private_context:false,...(model?{model_explanation:validateModelExplanation(model,expected)}:{})};
 }
 export function createPublicReviews({redis,store,tokenSha256,now=Date.now,makeId=()=>randomBytes(24).toString('hex')}){
  if(!redis||!store||!sha(tokenSha256))throw Error('REVIEW_CONFIGURATION');
