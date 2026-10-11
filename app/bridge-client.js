@@ -34,7 +34,7 @@
       if(typeof result.answer!=='string')throw new Error('The assessment is incomplete.');
       if(result.engine){
         const e=result.engine;
-        if(e.version!=='3.22.7'||e.adapter!=='certis-public-engine-export/1'||e.scope!=='public_quote_checks'||e.assessment_complete!==false||e.score_model!==null||a.state!=='INSUFFICIENT_EVIDENCE'||a.evidence_strength!==0||!Array.isArray(e.checks)||!e.checks.length||e.checks.length>4||e.checks.length!==result.sources.length)throw new Error('The engine result is outside the approved public scope.');
+        if(!['3.22.7','3.24.0'].includes(e.version)||e.adapter!=='certis-public-engine-export/1'||e.scope!=='public_quote_checks'||e.assessment_complete!==false||e.score_model!==null||a.state!=='INSUFFICIENT_EVIDENCE'||a.evidence_strength!==0||!Array.isArray(e.checks)||!e.checks.length||e.checks.length>4||e.checks.length!==result.sources.length)throw new Error('The engine result is outside the approved public scope.');
         for(const c of e.checks)if(!['btc','eth','xrp','sol'].includes(c.asset)||c.passed!==true||c.policy_version!=='certis-reasoning-control/1.0'||!Number.isFinite(Date.parse(c.evaluated_at))||Date.parse(c.evaluated_at)>Date.now()+5000||Date.now()-Date.parse(c.evaluated_at)>300000||!Array.isArray(c.required_evidence)||!c.required_evidence.every(x=>typeof x==='string'))throw new Error('The engine evidence is stale or incomplete.');
       }
       const node=message(result.answer);
