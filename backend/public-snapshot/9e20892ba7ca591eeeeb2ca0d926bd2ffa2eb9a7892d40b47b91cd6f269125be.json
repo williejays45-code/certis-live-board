@@ -1,0 +1,24 @@
+{
+  "schema": "certis-public-source/1",
+  "source_id": "bls-cpi",
+  "source_url": "https://api.bls.gov/publicAPI/v1/timeseries/data/CUUR0000SA0",
+  "retrieved_at": "2026-10-11T14:51:31.668051+00:00",
+  "observation_date": "2026-08-31",
+  "raw_sha256": "c18f1dd7d005786fda4e375226c77897565cf979d6205691cafe359809c457b0",
+  "observations": [
+    {
+      "metric": "CPI-U all items US city average, not seasonally adjusted",
+      "value": "334.980",
+      "unit": "index_1982_1984_100",
+      "observation_period": "2026-08",
+      "classification": "source_reported",
+      "evidence_id": "public-97955d9de805e42a4762e54586b964b5"
+    }
+  ],
+  "limitations": [
+    "CPI is a published aggregate index, not an individual household inflation estimate."
+  ],
+  "independently_reconciled": false,
+  "financial_action_authority": "none",
+  "private_context": false
+}

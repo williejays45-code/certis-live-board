@@ -1,0 +1,48 @@
+{
+  "schema": "certis-public-source/1",
+  "source_id": "treasury-2026",
+  "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
+  "retrieved_at": "2026-10-11T14:51:11.718462+00:00",
+  "observation_date": "2026-10-09",
+  "raw_sha256": "4dcf56a3652624c8cdb74aa2365a5a4a7afdae9ab24ba74ae01af1e38f73cc82",
+  "observations": [
+    {
+      "metric": "BC_3MONTH",
+      "value": "4.25",
+      "unit": "percent_par_yield",
+      "observation_period": "2026-10-09",
+      "classification": "source_reported",
+      "evidence_id": "public-2057e44da25c0d86650f6e839f25dfb9"
+    },
+    {
+      "metric": "BC_2YEAR",
+      "value": "4.80",
+      "unit": "percent_par_yield",
+      "observation_period": "2026-10-09",
+      "classification": "source_reported",
+      "evidence_id": "public-6e9fef2b5ee78f80d8a808659ab8c534"
+    },
+    {
+      "metric": "BC_10YEAR",
+      "value": "5.24",
+      "unit": "percent_par_yield",
+      "observation_period": "2026-10-09",
+      "classification": "source_reported",
+      "evidence_id": "public-bac5b95eab63d6c9b4effffc4f96dce8"
+    },
+    {
+      "metric": "BC_30YEAR",
+      "value": "5.60",
+      "unit": "percent_par_yield",
+      "observation_period": "2026-10-09",
+      "classification": "source_reported",
+      "evidence_id": "public-f20831898c8ba6da99282c95d637aeb4"
+    }
+  ],
+  "limitations": [
+    "Treasury reference yields are not executable bid/ask quotes or a forecast."
+  ],
+  "independently_reconciled": false,
+  "financial_action_authority": "none",
+  "private_context": false
+}

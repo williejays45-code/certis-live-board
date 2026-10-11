@@ -9,7 +9,7 @@ const exact=(x,keys)=>x!==null&&typeof x==='object'&&!Array.isArray(x)&&Object.k
 const date=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(x)&&Number.isFinite(Date.parse(x));
 const price=x=>typeof x==='string'&&/^(?:0|[1-9]\d{0,8})(?:\.\d{1,12})?$/.test(x)&&Number(x)>0;
 export function validateExport(value,now=Date.now()){
-  if(!exact(value,['schema','runtime_version','generated_at','quotes'])||value.schema!=='certis-public-market-export/1'||value.runtime_version!=='3.22.7'||!date(value.generated_at)||Date.parse(value.generated_at)>now||now-Date.parse(value.generated_at)>AGE_MS||!Array.isArray(value.quotes)||value.quotes.length>4)throw Error('INVALID_EXPORT');
+  if(!exact(value,['schema','runtime_version','generated_at','quotes'])||value.schema!=='certis-public-market-export/1'||!['3.22.7','3.24.0'].includes(value.runtime_version)||!date(value.generated_at)||Date.parse(value.generated_at)>now||now-Date.parse(value.generated_at)>AGE_MS||!Array.isArray(value.quotes)||value.quotes.length>4)throw Error('INVALID_EXPORT');
   const seen=new Set();
   for(const q of value.quotes){
     if(!exact(q,['asset','observed_at','last','bid','ask'])||!assets.has(q.asset)||seen.has(q.asset)||!date(q.observed_at)||Date.parse(q.observed_at)>Date.parse(value.generated_at)||now-Date.parse(q.observed_at)>AGE_MS||!['last','bid','ask'].every(k=>price(q[k]))||Number(q.bid)>Number(q.ask))throw Error('INVALID_EXPORT');
