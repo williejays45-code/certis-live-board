@@ -99,7 +99,7 @@ export function projectEngine(value,question){
     const c=claims(q);out.assessment.observations.push(c.fact);out.assessment.inferences.push(c.inference);
     out.sources.push({label:`Kraken ${q.asset.toUpperCase()}/USD public ticker`,uri:'https://api.kraken.com/0/public/Ticker',checked_at:q.observed_at,source_type:'market',supports:[c.fact,c.inference],challenges:[]});
   }
-  out.engine={version:'3.22.7',adapter:'certis-public-engine-export/1',scope:'public_quote_checks',assessment_complete:false,score_model:null,
+  out.engine={version:value.runtime_version,adapter:'certis-public-engine-export/1',scope:'public_quote_checks',assessment_complete:false,score_model:null,
     checks:selected.map(q=>{const a=value.analyses.find(a=>a.asset===q.asset);return {asset:q.asset,evaluated_at:a.evaluated_at,policy_version:a.evaluation.policy_version,passed:true,intake_state:a.plan.state,required_evidence:a.plan.required_evidence};})};
   return out;
 }
