@@ -38,7 +38,7 @@ redis.call('SET',key,cjson.encode(job),'PX',math.floor(job.expiresAt-tonumber(AR
 export const COMPLETE=`-- CERTIS_COMPLETE_V1
 local raw=redis.call('GET',KEYS[1]);if not raw then return 0 end;local job=cjson.decode(raw);
 if job.status~='running' or job.lease~=ARGV[1] or job.expiresAt<=tonumber(ARGV[2]) then return 0 end;
-job.status='complete';job.completedAt=tonumber(ARGV[2]);job.result=cjson.decode(ARGV[3]);job.lease=nil;
+job.status='complete';job.completedAt=tonumber(ARGV[2]);job.result=ARGV[3];job.lease=nil;
 redis.call('SET',KEYS[1],cjson.encode(job),'PX',math.floor(job.expiresAt-tonumber(ARGV[2])));return 1`;
 
 export function createEngineRequests({redis,store,tokenSha256,now=Date.now,makeId=id}){
@@ -61,7 +61,7 @@ export function createEngineRequests({redis,store,tokenSha256,now=Date.now,makeI
           const job=JSON.parse(raw);if(job.owner!==owner)return error(404,'REQUEST_NOT_FOUND');
           if(job.expiresAt<=now())return error(410,'ENGINE_REQUEST_EXPIRED');
           const result={status:job.status,request_id:requestId,requested_at:new Date(job.createdAt).toISOString(),expires_at:new Date(job.expiresAt).toISOString()};
-          if(job.status==='complete'){result.completed_at=new Date(job.completedAt).toISOString();result.result=validateAssessment(job.result,{now:now(),maxEvidenceAgeMs:300000});}
+          if(job.status==='complete'){result.completed_at=new Date(job.completedAt).toISOString();result.result=validateAssessment(JSON.parse(job.result),{now:now(),maxEvidenceAgeMs:300000});}
           return reply(200,result);
         }
         if(url.pathname!=='/api/certis/query'||url.searchParams.get('engine_request')!=='1')return error(404,'NOT_FOUND');
