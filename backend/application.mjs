@@ -49,7 +49,7 @@ export function createApplication({config,store,oidc,evidence,intelligence}={}){
         try{principal=await oidc.complete(url,tx);}catch(error){console.warn(diagnosticLine(error));return response(401,{error:{code:'SIGN_IN_REJECTED'}},{'Set-Cookie':cookie(LOGIN_COOKIE,'',0)});}
         await store.revoke(readCookie(request,SESSION_COOKIE));
         const sessionId=await store.issue(principal);
-        const result=response(303,{}, {'Location':config.origin+'/app/'});
+        const result=response(303,{}, {'Location':config.origin+'/'});
         result.headers.append('Set-Cookie',cookie(LOGIN_COOKIE,'',0));
         result.headers.append('Set-Cookie',cookie(SESSION_COOKIE,sessionId,3600));
         return result;
@@ -61,7 +61,7 @@ export function createApplication({config,store,oidc,evidence,intelligence}={}){
       if(path==='/auth/logout' && request.method==='POST'){
         if(request.headers.get('origin')!==config.origin)return error(403,'ORIGIN_DENIED');
         await store.revoke(readCookie(request,SESSION_COOKIE));
-        return response(303,{}, {'Location':config.origin+'/app/','Set-Cookie':cookie(SESSION_COOKIE,'',0)});
+        return response(303,{}, {'Location':config.origin+'/','Set-Cookie':cookie(SESSION_COOKIE,'',0)});
       }
       return error(405,'METHOD_NOT_ALLOWED');
     }catch{return error(503,'AUTH_SERVICE_UNAVAILABLE');}
