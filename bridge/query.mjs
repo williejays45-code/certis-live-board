@@ -17,7 +17,7 @@ export function unavailable() {
 // This validates a supplied score; it does not invent or certify a scoring model.
 export function validateAssessment(value, {now=Date.now(), maxEvidenceAgeMs, mode='public'}={}) {
   if (!Number.isFinite(maxEvidenceAgeMs) || maxEvidenceAgeMs <= 0) fail();
-  if (!exact(value,['answer','assessment','sources','authority']) || !text(value.answer)) fail();
+  if (!exact(value,Object.hasOwn(value||{},'engine')?['answer','assessment','sources','authority','engine']:['answer','assessment','sources','authority']) || !text(value.answer)) fail();
   const a=value.assessment;
   if (!exact(a,['state','evidence_strength','evidence_strength_meaning','observations','inferences','contrary_evidence','missing_evidence','next_watch'])) fail();
   if (!states.has(a.state) || !Number.isFinite(a.evidence_strength) || a.evidence_strength < 0 || a.evidence_strength > 100 || a.evidence_strength_meaning !== MEANING) fail();
@@ -39,10 +39,20 @@ export function validateAssessment(value, {now=Date.now(), maxEvidenceAgeMs, mod
   if (a.state==='SUPPORTED' && (a.evidence_strength<75 || a.missing_evidence.length || a.contrary_evidence.length || !a.observations.length || !a.inferences.length)) fail();
   if (a.state==='UNASSESSED' && a.evidence_strength!==0) fail();
   if (!external.length && (a.state!=='UNASSESSED' || a.observations.length || a.inferences.length || a.contrary_evidence.length)) fail();
+  if(Object.hasOwn(value,'engine')){
+    const e=value.engine;
+    if(!exact(e,['version','adapter','scope','assessment_complete','score_model','checks'])||e.version!=='3.22.7'||e.adapter!=='certis-public-engine-export/1'||e.scope!=='public_quote_checks'||e.assessment_complete!==false||e.score_model!==null||a.state!=='INSUFFICIENT_EVIDENCE'||a.evidence_strength!==0||!Array.isArray(e.checks)||!e.checks.length||e.checks.length>4||e.checks.length!==external.length)fail();
+    const seen=new Set(),ids=new Set(['digital-asset-registry-profile','active-contradiction-state','xrpl-endpoint-qualification','validated-ledger-anchor','xrpl-security-posture','evidence-provenance-packet','public-market-observation']);
+    for(const c of e.checks){
+      if(!exact(c,['asset','evaluated_at','policy_version','passed','intake_state','required_evidence'])||!['btc','eth','xrp','sol'].includes(c.asset)||seen.has(c.asset)||!timestamp(c.evaluated_at)||Date.parse(c.evaluated_at)>now||now-Date.parse(c.evaluated_at)>maxEvidenceAgeMs||c.policy_version!=='certis-reasoning-control/1.0'||c.passed!==true||!['ready_for_safe_acquisition','needs_customer_input'].includes(c.intake_state)||!Array.isArray(c.required_evidence)||c.required_evidence.length>7||!c.required_evidence.every(x=>ids.has(x))||!c.required_evidence.includes('active-contradiction-state')||!c.required_evidence.includes('digital-asset-registry-profile'))fail();
+      seen.add(c.asset);
+      if(!external.some(s=>s.label===`Kraken ${c.asset.toUpperCase()}/USD public ticker`&&Date.parse(s.checked_at)<=Date.parse(c.evaluated_at)))fail();
+    }
+  }
   // Never emit an arbitrary answer without claim-level references in contract v1.
   // All rendered claims are the validated, source-linked strings above.
   const result=structuredClone(value);
-  result.answer=external.length ? 'Review the source-linked observations and inferences below. This assessment does not authorize financial action.' : unavailable().answer;
+  result.answer=value.engine?'CERTIS checked the dated public evidence and produced the calculation and research requirements below. This is incomplete decision support, not a supported investment conclusion.':external.length ? 'Review the source-linked observations below. Engine analysis is unavailable for these quotes; no supported conclusion has been made.' : unavailable().answer;
   return result;
 }
 

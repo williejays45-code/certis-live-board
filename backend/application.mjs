@@ -1,21 +1,36 @@
 import {diagnosticLine} from './auth-diagnostics.mjs';
 import {createQueryHandler} from '../bridge/query.mjs';
 import {SESSION_COOKIE,LOGIN_COOKIE,cookie,readCookie} from './security.mjs';
+import {projectEngine,routeQuestion,areaGaps} from './engine-evidence.mjs';
+import {unavailable} from '../bridge/query.mjs';
 function response(status,body,headers={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff',...headers}});}
 const error=(status,code)=>response(status,{error:{code}});
-export function createApplication({config,store,oidc,evidence}={}){
+export function createApplication({config,store,oidc,evidence,intelligence}={}){
   const active=config.enabled && !!store && !!oidc;
   const query=createQueryHandler(active?{
     verifySession:request=>store.session(readCookie(request,SESSION_COOKIE)),
     consumeRateLimit:principal=>store.limit('query:'+principal),
-    ...(evidence?{queryEvidence:args=>evidence.query(args),maxEvidenceAgeMs:300000}:{}),
+    ...(evidence?{queryEvidence:async args=>{
+      if(args.mode!=='public')throw Error('PUBLIC_ONLY');
+      if(intelligence){
+        let value;try{value=await intelligence.read();}catch{value=null;}
+        if(value)return projectEngine(value,args.question);
+      }
+      const route=routeQuestion(args.question);
+      if(route.area!=='crypto'){const out=unavailable();out.assessment.missing_evidence=areaGaps[route.area];return out;}
+      return evidence.query(args);
+    },maxEvidenceAgeMs:300000}:{}),
   }:{});
   return async request=>{
     const url=new URL(request.url);
     if(url.origin!==config.origin)return error(403,'ORIGIN_DENIED');
     const path=url.pathname;
     if(path==='/internal/public-evidence')return evidence?evidence.ingest(request):error(503,'EXPORT_NOT_CONFIGURED');
-    if(path==='/healthz' && request.method==='GET')return response(200,{status:'ok',service:'certis-bridge',authentication_configured:!!active,public_export_configured:!!evidence,evidence_connected:evidence?await evidence.available():false,provider_enabled:false,financial_authority:'none'});
+    if(path==='/internal/public-intelligence')return intelligence?intelligence.ingest(request):error(503,'ENGINE_EXPORT_NOT_CONFIGURED');
+    if(path==='/healthz' && request.method==='GET'){
+      const engineConnected=intelligence?await intelligence.available():false;
+      return response(200,{status:'ok',service:'certis-bridge',authentication_configured:!!active,public_export_configured:!!evidence,evidence_connected:engineConnected||(evidence?await evidence.available():false),engine_connected:engineConnected,engine_adapter:'certis-public-engine-export/1',provider_enabled:false,financial_authority:'none'});
+    }
     if(path==='/api/certis/query')return query(request);
     if(!['/auth/login','/auth/callback','/auth/session','/auth/logout'].includes(path))return error(404,'NOT_FOUND');
     if(!active)return error(503,'AUTHENTICATION_NOT_CONFIGURED');
