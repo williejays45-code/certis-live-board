@@ -5,7 +5,7 @@ import {projectEngine,routeQuestion,areaGaps} from './engine-evidence.mjs';
 import {unavailable} from '../bridge/query.mjs';
 function response(status,body,headers={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff',...headers}});}
 const error=(status,code)=>response(status,{error:{code}});
-export function createApplication({config,store,oidc,evidence,intelligence}={}){
+export function createApplication({config,store,oidc,evidence,intelligence,engineRequests}={}){
   const active=config.enabled && !!store && !!oidc;
   const query=createQueryHandler(active?{
     verifySession:request=>store.session(readCookie(request,SESSION_COOKIE)),
@@ -25,11 +25,13 @@ export function createApplication({config,store,oidc,evidence,intelligence}={}){
     const url=new URL(request.url);
     if(url.origin!==config.origin)return error(403,'ORIGIN_DENIED');
     const path=url.pathname;
+    if(path==='/api/certis/query'&&url.searchParams.get('engine_request')==='1')return active&&engineRequests?engineRequests.browser(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
+    if(path==='/internal/public-engine/claim'||path==='/internal/public-engine/complete')return active&&engineRequests?engineRequests.machine(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
     if(path==='/internal/public-evidence')return evidence?evidence.ingest(request):error(503,'EXPORT_NOT_CONFIGURED');
     if(path==='/internal/public-intelligence')return intelligence?intelligence.ingest(request):error(503,'ENGINE_EXPORT_NOT_CONFIGURED');
     if(path==='/healthz' && request.method==='GET'){
       const engineConnected=intelligence?await intelligence.available():false;
-      return response(200,{status:'ok',service:'certis-bridge',authentication_configured:!!active,public_export_configured:!!evidence,evidence_connected:engineConnected||(evidence?await evidence.available():false),engine_connected:engineConnected,engine_adapter:'certis-public-engine-export/1',provider_enabled:false,financial_authority:'none'});
+      return response(200,{status:'ok',service:'certis-bridge',authentication_configured:!!active,public_export_configured:!!evidence,evidence_connected:engineConnected||(evidence?await evidence.available():false),engine_connected:engineConnected,engine_adapter:'certis-public-engine-export/1',engine_requests_enabled:!!engineRequests,provider_enabled:false,financial_authority:'none'});
     }
     if(path==='/api/certis/query')return query(request);
     if(!['/auth/login','/auth/callback','/auth/session','/auth/logout'].includes(path))return error(404,'NOT_FOUND');
