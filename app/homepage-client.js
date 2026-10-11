@@ -2,7 +2,6 @@
   const form=document.getElementById('ask'), input=document.getElementById('question'), answer=document.getElementById('answer');
   if(!form||!input||!answer)return;
   const button=form.querySelector('button[type="submit"]');
-  const conversationId=crypto.randomUUID();
   let pending=false;
   const listKeys=['observations','inferences','contrary_evidence','missing_evidence','next_watch'];
   const requirementLabels={
@@ -84,14 +83,11 @@
     node('p','Checking connected CERTIS evidence…');
     let failure='The evidence response could not be verified. No assessment was accepted.';
     try{
-      const response=await fetch('/api/certis/query',{method:'POST',credentials:'same-origin',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,conversation_id:conversationId,mode:'public',requested_at:new Date().toISOString()}),signal:AbortSignal.timeout(15000)});
-      if(!response.ok){
-        failure=({401:'Sign in with Google using the account control at the top of this page, then submit your question again.',403:'Access was denied. No assessment was made.',429:'The request limit was reached. Please try again later.'})[response.status]||'The authenticated CERTIS connection is unavailable. No assessment was made.';
-        throw Error('REQUEST_FAILED');
-      }
-      const body=await response.text();if(body.length>65536)throw Error('RESPONSE_TOO_LARGE');
-      render(requireResult(JSON.parse(body)));
+      const response=await window.CertisEngineRequests.query(question,message=>{answer.replaceChildren();node('p',message);});
+      render(requireResult(response.result));
+      if(response.request_id)node('p','Protected engine completed this request at '+response.completed_at+'. Reference: '+response.request_id.slice(0,12)+'.',answer,'fine');
     }catch(error){
+      failure=({401:'Sign in with Google using the account control at the top of this page, then submit your question again.',403:'Access was denied. No assessment was made.',410:'The protected engine did not complete this request before it expired. Check that the CERTIS node is awake and its refresh is running, then try again.',429:'The request limit was reached. Please try again later.',503:'The protected-engine request connection is unavailable. No assessment was made.'})[error?.status]||failure;
       answer.replaceChildren();node('h2','CERTIS connection');
       node('p',error?.name==='TimeoutError'?'CERTIS did not respond in time. No assessment was made.':failure);
     }finally{
