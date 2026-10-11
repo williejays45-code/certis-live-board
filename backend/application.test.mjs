@@ -32,14 +32,14 @@ test('callback requires browser transaction cookie',async()=>{const h=setup();as
 test('login session rotation, replay rejection, session lookup, logout revocation',async()=>{
  const h=setup();const oldId=await h.store.issue('google:old');
  const begin=await h.app(request('/auth/login','POST'));assert.equal(begin.status,303);const login=pick(begin,LOGIN_COOKIE);assert.match(begin.headers.get('set-cookie'),/Secure; HttpOnly; SameSite=Lax/);
- const callback=await h.app(request('/auth/callback?state=synthetic&code=synthetic','GET',login+`; ${SESSION_COOKIE}=${oldId}`));assert.equal(callback.status,303);const session=pick(callback,SESSION_COOKIE);
+ const callback=await h.app(request('/auth/callback?state=synthetic&code=synthetic','GET',login+`; ${SESSION_COOKIE}=${oldId}`));assert.equal(callback.status,303);assert.equal(callback.headers.get('location'),origin+'/');const session=pick(callback,SESSION_COOKIE);
  assert.equal(await h.store.session(oldId),null);
  assert.equal((await h.app(request('/auth/callback?state=synthetic&code=synthetic','GET',login))).status,401);
  const status=await h.app(request('/auth/session','GET',session));assert.deepEqual(await status.json(),{authenticated:true,founder_authority:false,financial_authority:'none'});
  const q={question:'Synthetic',conversation_id:'x',mode:'public',requested_at:new Date().toISOString()};
  const result=await h.app(request('/api/certis/query','POST',session,q));assert.equal(result.status,200);assert.equal((await result.json()).assessment.evidence_strength,0);
  assert.equal((await h.app(request('/api/certis/query','POST',session,{...q,mode:'founder'}))).status,403);
- assert.equal((await h.app(request('/auth/logout','POST',session))).status,303);
+ const logout=await h.app(request('/auth/logout','POST',session));assert.equal(logout.status,303);assert.equal(logout.headers.get('location'),origin+'/');
  assert.equal((await h.app(request('/auth/session','GET',session))).status,401);
 });
 test('provider error is sanitized',async()=>{const h=setup();h.oidc.complete=async()=>{throw Error('SECRET');};const begin=await h.app(request('/auth/login','POST'));const res=await h.app(request('/auth/callback?code=x','GET',pick(begin,LOGIN_COOKIE)));assert.equal(res.status,401);assert.ok(!(await res.text()).includes('SECRET'));});
