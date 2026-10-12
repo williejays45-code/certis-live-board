@@ -22,7 +22,7 @@ export function authenticationWithClient(config,client){
       let tokens;
       try { tokens=await oidc.authorizationCodeGrant(client,url,{pkceCodeVerifier:transaction.verifier,expectedState:transaction.state,expectedNonce:transaction.nonce,idTokenExpected:true}); }
       catch(error) { throw diagnosticFailure('exchange',error); }
-      try { return principalFromClaims(tokens.claims(),config.allowedEmail); }
+      try { return principalFromClaims(tokens.claims()); }
       catch(error) { throw diagnosticFailure('account',error); }
       // Access/refresh/ID tokens are never stored in the browser or session store.
     }

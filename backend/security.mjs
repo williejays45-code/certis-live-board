@@ -15,10 +15,9 @@ export function configuration(env){
   const origin=env.CERTIS_PUBLIC_ORIGIN||'https://certisintelligence.com';
   if(origin!=='https://certisintelligence.com')throw Error('INVALID_PUBLIC_ORIGIN');
   if(!enabled)return {enabled:false,origin};
-  if(!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET || !env.REDIS_URL || !env.CERTIS_ALLOWED_EMAIL)throw Error('AUTH_CONFIGURATION_INCOMPLETE');
+  if(!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET || !env.REDIS_URL)throw Error('AUTH_CONFIGURATION_INCOMPLETE');
   if(!/^rediss?:\/\//.test(env.REDIS_URL))throw Error('INVALID_STORE_URL');
-  if(env.CERTIS_ALLOWED_EMAIL.toLowerCase()!=='certisfounder@gmail.com')throw Error('UNAPPROVED_ACCOUNT');
-  return {enabled:true,origin,clientId:env.GOOGLE_CLIENT_ID,clientSecret:env.GOOGLE_CLIENT_SECRET,redisUrl:env.REDIS_URL,allowedEmail:env.CERTIS_ALLOWED_EMAIL.toLowerCase()};
+  return {enabled:true,origin,clientId:env.GOOGLE_CLIENT_ID,clientSecret:env.GOOGLE_CLIENT_SECRET,redisUrl:env.REDIS_URL};
 }
 
 // Session IDs are random bearer values; Redis keys contain only their hashes.
@@ -54,7 +53,7 @@ export class SecurityStore {
   }
 }
 
-export function principalFromClaims(claims,allowedEmail){
-  if(!claims || claims.iss!==ISSUER || claims.email_verified!==true || typeof claims.email!=='string'||claims.email.toLowerCase()!==allowedEmail || typeof claims.sub!=='string'||!claims.sub||claims.sub.length>200)throw Error('ACCOUNT_DENIED');
+export function principalFromClaims(claims){
+  if(!claims || claims.iss!==ISSUER || claims.email_verified!==true || typeof claims.email!=='string'||!claims.email.trim() || typeof claims.sub!=='string'||!claims.sub||claims.sub.length>200)throw Error('ACCOUNT_DENIED');
   return 'google:'+claims.sub;
 }
