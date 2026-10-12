@@ -49,7 +49,7 @@
     const a=result.assessment;
     answer.replaceChildren();
     node('h2','CERTIS evidence response');
-    node('p',a.state.replaceAll('_',' ')+' · '+(a.evidence_strength===0?'Evidence strength: unscored':a.evidence_strength+'/100 evidence strength, not probability'),answer,'assessment-status');
+    node('p',({UNASSESSED:'Not yet assessed',INSUFFICIENT_EVIDENCE:'More evidence needed',EMERGING:'Early evidence — more verification needed',SUPPORTED:'Supported by the available evidence',CONFLICTED:'Sources disagree'})[a.state]+' · '+(a.evidence_strength===0?'Evidence strength: unscored':a.evidence_strength+'/100 evidence strength, not probability'),answer,'assessment-status');
     node('p',result.answer);
     section('What is observed',a.observations,'No verified observation is connected for this question.');
     section('What can be inferred',a.inferences,'No inference is supported by the connected evidence.');
@@ -64,7 +64,7 @@
       }
     }
     if(result.engine){
-      node('h3','Protected engine checks');
+      node('h3','Evidence checks');
       for(const check of result.engine.checks){
         node('p','CERTIS '+result.engine.version+' · '+check.asset.toUpperCase()+' citation and authority checks passed at '+check.evaluated_at+'.');
         section('Further research',check.required_evidence.map(k=>requirementLabels[k]),'No intake requirements were supplied.');
@@ -87,7 +87,7 @@
       render(requireResult(response.result));
       if(response.request_id)node('p','Protected engine completed this request at '+response.completed_at+'. Reference: '+response.request_id.slice(0,12)+'.',answer,'fine');
     }catch(error){
-      failure=({401:'Sign in with Google using the account control at the top of this page, then submit your question again.',403:'Access was denied. No assessment was made.',410:'The protected engine did not complete this request before it expired. Check that the CERTIS node is awake and its refresh is running, then try again.',429:'The request limit was reached. Please try again later.',503:'The protected-engine request connection is unavailable. No assessment was made.'})[error?.status]||failure;
+      failure=({401:'Sign in with Google using the account control at the top of this page, then submit your question again.',403:'Access was denied. No assessment was made.',410:'The protected engine did not complete this request before it expired. Try again later, or contact support if this continues.',429:'The request limit was reached. Please try again later.',503:'The protected-engine request connection is unavailable. No assessment was made.'})[error?.status]||failure;
       answer.replaceChildren();node('h2','CERTIS connection');
       node('p',error?.name==='TimeoutError'?'CERTIS did not respond in time. No assessment was made.':failure);
     }finally{
