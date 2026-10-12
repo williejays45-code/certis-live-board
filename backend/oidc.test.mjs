@@ -7,7 +7,7 @@ import {ISSUER} from './security.mjs';
 const {privateKey,publicKey}=generateKeyPairSync('rsa',{modulusLength:2048});
 const jwk={...publicKey.export({format:'jwk'}),kid:'synthetic-key',alg:'RS256',use:'sig'};
 const json=value=>Buffer.from(JSON.stringify(value)).toString('base64url');
-const config={origin:'https://certisintelligence.com',clientId:'synthetic-client',allowedEmail:'certisfounder@gmail.com'};
+const config={origin:'https://certisintelligence.com',clientId:'synthetic-client'};
 async function setup(overrides={}){
   const client=new oidc.Configuration({issuer:ISSUER,authorization_endpoint:ISSUER+'/authorize',token_endpoint:ISSUER+'/token',jwks_uri:ISSUER+'/jwks'},config.clientId,'synthetic-secret');
   const auth=authenticationWithClient(config,client),login=await auth.begin();
@@ -29,6 +29,7 @@ async function setup(overrides={}){
   return {auth,login,callback,get calls(){return calls;},corrupt(){jwt=jwt.slice(0,-10)+'AAAAAAAAAA';}};
 }
 test('real OIDC library validates synthetic signed ID token with PKCE/nonce/state',async()=>{const h=await setup();const url=new URL(h.login.url);assert.equal(url.searchParams.get('code_challenge_method'),'S256');assert.equal(url.searchParams.get('scope'),'openid email');assert.equal(await h.auth.complete(h.callback,h.login.transaction),'google:synthetic-sub');assert.ok(h.calls>=2);});
-for(const [name,claims] of [['issuer',{iss:'https://evil.example'}],['audience',{aud:'wrong-client'}],['expiry',{exp:1}],['nonce',{nonce:'wrong'}],['email',{email:'other@example.com'}],['unverified email',{email_verified:false}]])test('reject wrong '+name,async()=>{const h=await setup(claims);await assert.rejects(()=>h.auth.complete(h.callback,h.login.transaction));});
+for(const [name,claims] of [['issuer',{iss:'https://evil.example'}],['audience',{aud:'wrong-client'}],['expiry',{exp:1}],['nonce',{nonce:'wrong'}],['unverified email',{email_verified:false}],['missing email',{email:''}]])test('reject wrong '+name,async()=>{const h=await setup(claims);await assert.rejects(()=>h.auth.complete(h.callback,h.login.transaction));});
+test('accept another verified Google member without granting founder authority',async()=>{const h=await setup({email:'member@example.com'});assert.equal(await h.auth.complete(h.callback,h.login.transaction),'google:synthetic-sub');});
 test('reject state before token exchange',async()=>{const h=await setup();h.callback.searchParams.set('state','wrong');await assert.rejects(()=>h.auth.complete(h.callback,h.login.transaction));assert.equal(h.calls,0);});
 test('reject forged signature',async()=>{const h=await setup();h.corrupt();await assert.rejects(()=>h.auth.complete(h.callback,h.login.transaction));});
