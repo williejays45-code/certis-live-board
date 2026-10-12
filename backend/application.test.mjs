@@ -21,10 +21,10 @@ function setup(){
 test('configuration disabled by default',()=>assert.equal(configuration({}).enabled,false));
 test('enabled but missing config fails startup',()=>assert.throws(()=>configuration({CERTIS_AUTH_ENABLED:'true'})));
 test('arbitrary public origin cannot change callback',()=>assert.throws(()=>configuration({CERTIS_PUBLIC_ORIGIN:'https://evil.example'})));
-test('unapproved account config rejected',()=>assert.throws(()=>configuration({CERTIS_AUTH_ENABLED:'true',GOOGLE_CLIENT_ID:'id',GOOGLE_CLIENT_SECRET:'s',REDIS_URL:'redis://internal',CERTIS_ALLOWED_EMAIL:'other@example.com'})));
-test('email verification is mandatory',()=>assert.throws(()=>principalFromClaims({iss:ISSUER,sub:'s',email:'certisfounder@gmail.com',email_verified:false},'certisfounder@gmail.com')));
-test('different verified email denied',()=>assert.throws(()=>principalFromClaims({iss:ISSUER,sub:'s',email:'other@example.com',email_verified:true},'certisfounder@gmail.com')));
-test('principal uses issuer subject, not email role',()=>assert.equal(principalFromClaims({iss:ISSUER,sub:'s',email:'certisfounder@gmail.com',email_verified:true},'certisfounder@gmail.com'),'google:s'));
+test('public authentication config does not require a founder email allowlist',()=>assert.equal(configuration({CERTIS_AUTH_ENABLED:'true',GOOGLE_CLIENT_ID:'id',GOOGLE_CLIENT_SECRET:'s',REDIS_URL:'redis://internal'}).enabled,true));
+test('email verification is mandatory',()=>assert.throws(()=>principalFromClaims({iss:ISSUER,sub:'s',email:'member@example.com',email_verified:false})));
+test('different verified Google member is accepted for public workspace',()=>assert.equal(principalFromClaims({iss:ISSUER,sub:'s',email:'member@example.com',email_verified:true}),'google:s'));
+test('principal uses issuer subject, not email role',()=>assert.equal(principalFromClaims({iss:ISSUER,sub:'s',email:'certisfounder@gmail.com',email_verified:true}),'google:s'));
 test('secure cookie parser rejects duplicates',()=>assert.equal(readCookie(request('/','GET',`${SESSION_COOKIE}=${'a'.repeat(43)}; ${SESSION_COOKIE}=${'b'.repeat(43)}`),SESSION_COOKIE),null));
 test('disabled backend health succeeds but auth fails closed',async()=>{const app=createApplication({config:{enabled:false,origin}});assert.equal((await app(request('/healthz'))).status,200);assert.equal((await app(request('/auth/login','POST'))).status,503);});
 test('login requires same-origin POST',async()=>{const {app}=setup();assert.equal((await app(request('/auth/login'))).status,405);assert.equal((await app(new Request(origin+'/auth/login',{method:'POST',headers:{Origin:'https://evil.example'}}))).status,403);});
