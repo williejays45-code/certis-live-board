@@ -1,0 +1,50 @@
+{
+  "schema": "certis-public-source/1",
+  "source_id": "census-cbp-2023",
+  "source_url": "https://www2.census.gov/programs-surveys/cbp/datasets/2023/cbp23co.zip",
+  "retrieved_at": "2026-10-11T14:51:32.191587+00:00",
+  "observation_date": "2023-12-31",
+  "raw_sha256": "e9539e96ceb91608ad44ab1cfc651d7c1ff9b88bddfe7a8ff64134ccde6e9603",
+  "observations": [
+    {
+      "metric": "Dallas County establishments, all industries",
+      "value": "71182",
+      "unit": "establishments",
+      "observation_period": "2023",
+      "classification": "source_reported",
+      "evidence_id": "public-b51f59cbc30d67bb071cb00f2e847d1e"
+    },
+    {
+      "metric": "Dallas County employment, week of March 12",
+      "value": "1648702",
+      "unit": "employees",
+      "observation_period": "2023",
+      "classification": "published_noise_adjusted_statistic",
+      "evidence_id": "public-a723bd57d9b1f2770a2d4ea5acd5a198"
+    },
+    {
+      "metric": "Dallas County first-quarter payroll",
+      "value": "34918409",
+      "unit": "thousand_USD",
+      "observation_period": "2023",
+      "classification": "published_noise_adjusted_statistic",
+      "evidence_id": "public-cafbbb04595734bd3d984d6112d00ae9"
+    },
+    {
+      "metric": "Dallas County annual payroll",
+      "value": "131920641",
+      "unit": "thousand_USD",
+      "observation_period": "2023",
+      "classification": "published_noise_adjusted_statistic",
+      "evidence_id": "public-f7b19e4b4d83b9a2218675612dad382d"
+    }
+  ],
+  "limitations": [
+    "2023 aggregate business statistics are historical context, not present-day local demand or private EnTrus performance.",
+    "Census disclosure/noise treatment applies; payroll units are thousands of dollars. Suppressed values are omitted.",
+    "One county aggregate cannot establish company revenue, profitability, opportunity, or a forecast."
+  ],
+  "independently_reconciled": false,
+  "financial_action_authority": "none",
+  "private_context": false
+}

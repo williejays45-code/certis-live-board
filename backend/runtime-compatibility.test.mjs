@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {validateEngineExport,projectEngine} from './engine-evidence.mjs';
+import {validateAssessment} from '../bridge/query.mjs';
+const now=Date.now();
+const payload=version=>({schema:'certis-public-engine-export/1',runtime_version:version,generated_at:new Date(now).toISOString(),quotes:[{asset:'btc',observed_at:new Date(now-1000).toISOString(),last:'101',bid:'100',ask:'102'}],analyses:[{asset:'btc',evaluated_at:new Date(now).toISOString(),evaluation:{policy_version:'certis-reasoning-control/1.0',passed:true,assertion_count:2,citation_grounding:1,required_evidence_coverage:1,contradiction_disclosure:1,authoritative_verdict:false,financial_action_authority:'none'},plan:{canonical_asset_id:'bitcoin',state:'ready_for_safe_acquisition',required_evidence:['digital-asset-registry-profile','active-contradiction-state'],automatic_execution_enabled:false,integrity_verified:true}}]});
+for(const version of ['3.22.7','3.24.0'])test('BTC contract preserves verified runtime identity '+version,()=>{const raw=validateEngineExport(payload(version),now);const result=validateAssessment(projectEngine(raw,'BTC'),{now,maxEvidenceAgeMs:300000});assert.equal(result.engine.version,version);assert.equal(result.assessment.evidence_strength,0);assert.equal(result.authority.financial_execution,false);});
+test('unverified runtime versions rejected',()=>{for(const version of ['3.24.1','3.22.6',undefined])assert.throws(()=>validateEngineExport(payload(version),now));});

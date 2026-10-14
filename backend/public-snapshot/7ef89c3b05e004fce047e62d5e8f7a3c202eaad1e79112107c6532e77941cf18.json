@@ -1,0 +1,274 @@
+{
+  "schema": "certis-public-source/1",
+  "source_id": "dallas-matrix",
+  "source_url": "https://github.com/williejays45-code/landrix/tree/dd60b6ed551a4894cf32c0f1d6b2b9ddfef08695",
+  "retrieved_at": "2026-10-11T14:51:33.000555+00:00",
+  "observation_date": "2026-09-30",
+  "raw_sha256": "8c5bea111309161ac1cadc60dad354c451d009754639bd5f48b5d097af6c505b",
+  "observations": [
+    {
+      "metric": "EV-PID-IDENTITY",
+      "value": "AUTOMATIC_READY",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-3f4f7d274aa1e0efe9756812395025bc"
+    },
+    {
+      "metric": "EV-PID-DOC",
+      "value": "AUTOMATIC_READY",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-54232dfed0d7f23eee3318133bbd4c2d"
+    },
+    {
+      "metric": "EV-OWN-RECORDED",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-b6d74610a671a86083da255eb1d3f4cb"
+    },
+    {
+      "metric": "EV-TTL-RECORDS",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-28c1185c7dde030fce466169b9fab2d6"
+    },
+    {
+      "metric": "EV-TAX-ACCOUNT",
+      "value": "CAPABILITY_NOT_RUNTIME_REGISTERED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-fd4741b5847ddbc822bef940ae28006d"
+    },
+    {
+      "metric": "EV-TAX-TITLE",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-4dce14862763bf78c8a9ea282447d7d5"
+    },
+    {
+      "metric": "EV-MKT-COMPARABLES",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-95904967e7892eacbf7a0193f323960a"
+    },
+    {
+      "metric": "EV-MKT-PROPERTY",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-78f1a02dbc5cd728323ee913f78338cb"
+    },
+    {
+      "metric": "EV-RNT-MARKET",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-0b3f9eedc00773e8ed6a0b9cc563bde2"
+    },
+    {
+      "metric": "EV-RNT-PROPERTY",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-c56e6e69bd4ebb436848ab937b30ca1b"
+    },
+    {
+      "metric": "EV-ZON-CODE",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-7b99e8b6f582f6df2fe311f757c61c09"
+    },
+    {
+      "metric": "EV-ZON-JURISDICTION",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-db395686e9f2ca7850a071e0042701d4"
+    },
+    {
+      "metric": "EV-PERMIT-RECORDS",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-8ec7d8a53a671b9e85a70bae567a74ea"
+    },
+    {
+      "metric": "EV-HOA-ASSOCIATION",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-f69af4f108bc5eb0c017470015150568"
+    },
+    {
+      "metric": "EV-HOA-DOCUMENTS",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-f70d0bdf35c0aa8689c236b82787ec27"
+    },
+    {
+      "metric": "EV-HAZ-EXPOSURE",
+      "value": "CAPABILITY_NOT_RUNTIME_REGISTERED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-ba5ac0f8aefe2484aaa86df3cea8ddb5"
+    },
+    {
+      "metric": "EV-HAZ-ENV",
+      "value": "CAPABILITY_NOT_RUNTIME_REGISTERED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-46b5e3ee2a6ff2b1fb25c8317bad2125"
+    },
+    {
+      "metric": "EV-INS-PROPERTY",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-0851ddf9f15a2a8c295794e95e4b5071"
+    },
+    {
+      "metric": "EV-INS-HAZARD",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-558e10945cc54e5213c3c0cfac03116d"
+    },
+    {
+      "metric": "EV-INS-CONDITION",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-108932b8f270c7bcf47857e276336f17"
+    },
+    {
+      "metric": "EV-PHY-CONDITION",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-66941d4a340a49fefdfa44a5c594ae14"
+    },
+    {
+      "metric": "EV-DMG-EVENT",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-544bac40db41dd1144e11b02794012af"
+    },
+    {
+      "metric": "EV-DMG-CURRENT",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-f11fbbb977616a7e03fa07e4907e2572"
+    },
+    {
+      "metric": "EV-ACC-LEGAL",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-d011f6ec28750590c038c7490e0e1ede"
+    },
+    {
+      "metric": "EV-ACC-PROPERTY",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-76d69ef6e9afd1afbb45aeabe14cdbdb"
+    },
+    {
+      "metric": "EV-UTL-SERVICE",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-758eec63a84720e1c85de6df262ee202"
+    },
+    {
+      "metric": "EV-UTL-JURISDICTION",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-30e2a436f8c881794d0b023ddcb0f1ef"
+    },
+    {
+      "metric": "EV-SCH-DISTRICT",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-e4a835bca28697d7fca9ac39e56388a6"
+    },
+    {
+      "metric": "EV-SCH-ASSIGNMENT",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-9cd3dbc37695bbeacf83d11c2ddd5328"
+    },
+    {
+      "metric": "EV-FIN-BASIS",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-5a87eabaad645860488db53fede8d474"
+    },
+    {
+      "metric": "EV-FIN-MARKET",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-beb994f9070276e95351c921e87cf23c"
+    },
+    {
+      "metric": "EV-FIN-RISK",
+      "value": "FALLBACK_REQUIRED",
+      "unit": "planning_state",
+      "observation_period": "2026-09-30",
+      "classification": "historical_planning_reference",
+      "evidence_id": "public-bb809da05833b4a451edf1d01f30e0b2"
+    }
+  ],
+  "limitations": [
+    "This is planning readiness at the pinned LANDITRUS commit, not current production acquisition or property qualification.",
+    "All 32 evidence requirements remain unresolved for a new CERTIS property case until property-bound evidence is admitted.",
+    "Later independently verified LANDITRUS countywide coverage is not invalidated by this older bounded matrix."
+  ],
+  "independently_reconciled": false,
+  "financial_action_authority": "none",
+  "private_context": false
+}

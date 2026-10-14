@@ -1,0 +1,44 @@
+{
+  "schema": "certis-public-source/1",
+  "source_id": "landitrus-dcad",
+  "source_url": "https://dallascad.org/DataProducts.aspx",
+  "retrieved_at": "2026-10-11T14:51:33.000555+00:00",
+  "observation_date": null,
+  "raw_sha256": "46e689926af6c878515eb126418b85a12a6d9cb4180c92745f53466f0553b90e",
+  "observations": [
+    {
+      "metric": "LANDITRUS qualified fixture appraisal year",
+      "value": "2027",
+      "unit": "appraisal_year",
+      "observation_period": "2027",
+      "classification": "historical_local_reference",
+      "evidence_id": "public-e973b91b1a7571322d5dd1707f3728ce"
+    },
+    {
+      "metric": "DCAD previous-market-value field",
+      "value": "308190.00",
+      "unit": "USD",
+      "observation_period": "previous_period_unspecified",
+      "classification": "historical_local_reference",
+      "evidence_id": "public-bc6c068b34e89b4f57990b11e852de09"
+    },
+    {
+      "metric": "DCAD total-appraisal field",
+      "value": "0.00",
+      "unit": "USD",
+      "observation_period": "2027",
+      "classification": "historical_local_reference",
+      "evidence_id": "public-9a3072639d33bf86c00fb5cded4ea40f"
+    }
+  ],
+  "limitations": [
+    "The 2027 appraisal-year label is not an observation/retrieval date and does not prove 2026 certified coverage.",
+    "Appraisal and previous-market-value fields are not independently verified current market prices.",
+    "The zero appraisal field does not establish a zero market value.",
+    "No title, ownership, sale comparables, property condition, flood status or insurance conclusion is established.",
+    "LANDITRUS retains property identity authority. This local reference does not bind a new case identity."
+  ],
+  "independently_reconciled": false,
+  "financial_action_authority": "none",
+  "private_context": false
+}
