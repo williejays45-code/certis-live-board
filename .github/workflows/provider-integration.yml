@@ -1,7 +1,9 @@
-name: Provider integration
+name: Integrated bridge and customer checks
 on:
   pull_request:
-    branches: [codex/protected-evidence-bridge]
+    branches: [main, codex/protected-evidence-bridge]
+  push:
+    branches: [main]
 permissions:
   contents: read
 jobs:
