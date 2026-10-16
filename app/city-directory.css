@@ -1,0 +1,20 @@
+.city-directory{padding:48px 6%;border-top:1px solid #496677;border-bottom:1px solid #496677;scroll-margin-top:20px;color:#e8eff4;background:#10212e}
+.city-directory-heading{max-width:70ch}
+.city-directory .city-eyebrow{color:#c5dbea;font-size:14px;letter-spacing:.08em;margin:0 0 12px}
+.city-directory h2{font:400 clamp(28px,4vw,40px)/1.2 Georgia,serif;margin:0 0 16px;color:#f3e3a7}
+.city-directory h3{font:400 25px/1.3 Georgia,serif;margin:8px 0 14px;color:#f1f5f7}
+.city-directory p,.city-directory dd{font-size:17px;line-height:1.65;max-width:70ch;margin:10px 0;overflow-wrap:anywhere}
+.city-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px;margin-top:30px}
+.city-destinations article{border-top:1px solid #648294;padding-top:20px;min-width:0}
+.city-directory .city-state{font-size:14px;color:#c5dbea;margin:0 0 8px}
+.city-destinations a{display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:10px 16px;margin-top:8px;background:#c7e4ee;color:#10212e;border-radius:4px;font-size:17px;text-decoration:none}
+.city-directory a:focus-visible{outline:3px solid #f3d078;outline-offset:5px}
+.city-directory a:hover{text-decoration:underline}
+.city-directory .city-question-link{display:flex;align-items:center;gap:10px;min-height:44px;width:fit-content;margin-top:8px;color:#c7e4ee;text-decoration:underline}
+.city-directory .city-account-note{font-size:14px;color:#b9cdda;line-height:1.6;margin-top:12px}
+.city-capabilities{margin-top:36px;border-top:1px solid #648294;padding-top:20px}
+.city-capabilities dl{margin:16px 0}
+.city-capabilities dl>div{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,2fr);gap:24px;padding:14px 0;border-top:1px solid #3d586a}
+.city-capabilities dt{font-size:17px;font-weight:600;line-height:1.6}
+.city-capabilities dd{margin:0}
+@media(max-width:700px){.city-directory{padding:30px 20px}.city-destinations{grid-template-columns:1fr;gap:26px}.city-capabilities dl>div{grid-template-columns:1fr;gap:5px}.city-destinations a{width:100%;justify-content:space-between}.city-directory p,.city-directory dd{font-size:17px}}
