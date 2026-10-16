@@ -7,8 +7,8 @@ const origin='https://certisintelligence.com',token='a'.repeat(43),tokenSha256=c
 function setup(){
  let clock=Date.parse('2026-10-11T13:00:00.000Z'),user='google:founder',limited=false,counter=0;const values=new Map(),queue=[];
  const redis={get:async key=>values.get(key)||null,eval:async(script,{keys,arguments:a})=>{
-   if(script===ENQUEUE){const prior=values.get(keys[1]),old=prior&&JSON.parse(values.get(PREFIX+prior)||'null');if(old&&old.expiresAt>clock&&['pending','running'].includes(old.status))return prior;if(queue.length>=8)return null;values.set(keys[2],a[1]);values.set(keys[1],a[0]);queue.push(a[0]);return a[0];}
-   if(script===CLAIM){while(queue.length){const key=PREFIX+queue.shift(),job=JSON.parse(values.get(key)||'null');if(job&&job.status==='pending'&&job.expiresAt>clock+20000){Object.assign(job,{status:'running',lease:a[2],claimedAt:clock});values.set(key,JSON.stringify(job));return JSON.stringify(job);}}return null;}
+   if(script===ENQUEUE){const prior=values.get(keys[1]),old=prior&&JSON.parse(values.get(PREFIX+prior)||'null');if(old&&old.expiresAt>clock&&['pending','running'].includes(old.status))return prior;if(queue.length>=1)return null;values.set(keys[2],a[1]);values.set(keys[1],a[0]);queue.push(a[0]);return a[0];}
+   if(script===CLAIM){while(queue.length){const key=PREFIX+queue.shift(),job=JSON.parse(values.get(key)||'null');if(job&&job.status==='pending'&&job.expiresAt>clock+80000){Object.assign(job,{status:'running',lease:a[2],claimedAt:clock});values.set(key,JSON.stringify(job));return JSON.stringify(job);}}return null;}
    if(script===COMPLETE){const job=JSON.parse(values.get(keys[0])||'null');if(!job||job.status!=='running'||job.lease!==a[0]||job.expiresAt<=clock)return 0;Object.assign(job,{status:'complete',completedAt:clock,result:a[2]});delete job.lease;values.set(keys[0],JSON.stringify(job));return 1;}
    throw Error('UNEXPECTED_SCRIPT');}};
  const store={session:async()=>user?{principalId:user,roles:[]}:null,limit:async()=>!limited};

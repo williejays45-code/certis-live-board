@@ -25,14 +25,15 @@ local prior=redis.call('GET',KEYS[2]);
 if prior then local raw=redis.call('GET',ARGV[4]..prior); if raw then local old=cjson.decode(raw); if old.expiresAt>tonumber(ARGV[3]) and (old.status=='pending' or old.status=='running') then return prior end end end;
 local items=redis.call('LRANGE',KEYS[1],0,-1);redis.call('DEL',KEYS[1]);
 for _,v in ipairs(items) do if redis.call('EXISTS',ARGV[4]..v)==1 then redis.call('RPUSH',KEYS[1],v) end end;
-if redis.call('LLEN',KEYS[1])>=8 then return false end;
+-- One waiting request fits the minute dispatcher; an active claim is separate.
+if redis.call('LLEN',KEYS[1])>=1 then return false end;
 redis.call('SET',KEYS[3],ARGV[2],'PX',210000,'NX');
 redis.call('SET',KEYS[2],ARGV[1],'PX',210000);
 redis.call('RPUSH',KEYS[1],ARGV[1]);redis.call('PEXPIRE',KEYS[1],210000);return ARGV[1]`;
 export const CLAIM=`-- CERTIS_CLAIM_V1
 for i=1,8 do local next=redis.call('LPOP',KEYS[1]); if not next then return false end;
 local key=ARGV[1]..next;local raw=redis.call('GET',key);
-if raw then local job=cjson.decode(raw);if job.status=='pending' and job.expiresAt>tonumber(ARGV[2])+20000 then
+if raw then local job=cjson.decode(raw);if job.status=='pending' and job.expiresAt>tonumber(ARGV[2])+80000 then
 job.status='running';job.lease=ARGV[3];job.claimedAt=tonumber(ARGV[2]);
 redis.call('SET',key,cjson.encode(job),'PX',math.floor(job.expiresAt-tonumber(ARGV[2])));return cjson.encode(job) end end end;return false`;
 export const COMPLETE=`-- CERTIS_COMPLETE_V1
