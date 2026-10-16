@@ -26,7 +26,7 @@ export function createApplication({config,store,oidc,evidence,intelligence,engin
     if(url.origin!==config.origin)return error(403,'ORIGIN_DENIED');
     const path=url.pathname;
     if(path==='/api/certis/query'&&url.searchParams.get('public_review')==='1')return active&&publicReviews?publicReviews.browser(request):error(503,'PUBLIC_REVIEWS_NOT_CONFIGURED');
-    if(path==='/internal/public-review/claim'||path==='/internal/public-review/complete')return active&&publicReviews?publicReviews.machine(request):error(503,'PUBLIC_REVIEWS_NOT_CONFIGURED');
+    if(path==='/internal/public-review/claim'||path==='/internal/public-review/complete'||path==='/internal/public-work/claim')return active&&publicReviews?publicReviews.machine(request):error(503,'PUBLIC_REVIEWS_NOT_CONFIGURED');
     if(path==='/api/certis/query'&&url.searchParams.get('engine_request')==='1')return active&&engineRequests?engineRequests.browser(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
     if(path==='/internal/public-engine/claim'||path==='/internal/public-engine/complete')return active&&engineRequests?engineRequests.machine(request):error(503,'ENGINE_REQUESTS_NOT_CONFIGURED');
     if(path==='/internal/public-evidence')return evidence?evidence.ingest(request):error(503,'EXPORT_NOT_CONFIGURED');

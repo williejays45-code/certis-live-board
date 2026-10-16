@@ -2,13 +2,32 @@ import {validateModelExplanation} from './model-explanation.mjs';
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {readCookie,SESSION_COOKIE} from './security.mjs';
-import {ENQUEUE,CLAIM} from './engine-requests.mjs';
+import {ENQUEUE,CLAIM,PREFIX as ENGINE_PREFIX} from './engine-requests.mjs';
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const id=v=>typeof v==='string'&&/^[a-f0-9]{48}$/.test(v);
 const sha=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 export const DOMAINS={property:['dallas-matrix','landitrus-dcad'],business:['census-cbp-2023'],traditional_finance:['treasury-2026','bls-cpi']};
 export const PREFIX='certis:bridge:v1:public-review:',ORIGIN='https://certisintelligence.com';
+// Select the oldest eligible request across both bounded queues atomically.
+// Each legacy claim endpoint stays compatible during the worker rollout.
+export const CLAIM_NEXT=`-- CERTIS_PUBLIC_WORK_CLAIM_V1
+local chosen=nil;local chosenKey=nil;local chosenQueue=nil;
+for n=1,2 do
+ for i=1,8 do
+  local id=redis.call('LINDEX',KEYS[n],0);if not id then break end;
+  local key=ARGV[n]..id;local raw=redis.call('GET',key);local job=nil;
+  if raw then job=cjson.decode(raw) end;
+  if job and job.status=='pending' and job.expiresAt>tonumber(ARGV[3])+80000 then
+   if not chosen or job.createdAt<chosen.createdAt then chosen=job;chosenKey=key;chosenQueue=KEYS[n] end;
+   break;
+  else redis.call('LPOP',KEYS[n]) end;
+ end;
+end;
+if not chosen then return false end;
+redis.call('LPOP',chosenQueue);chosen.status='running';chosen.lease=ARGV[4];chosen.claimedAt=tonumber(ARGV[3]);
+redis.call('SET',chosenKey,cjson.encode(chosen),'PX',math.floor(chosen.expiresAt-tonumber(ARGV[3])));
+return cjson.encode(chosen)`;
 const root=new URL('./public-snapshot/',import.meta.url);
 const manifestRaw=readFileSync(new URL('manifest.json',root));
 export const MANIFEST_SHA=hash(manifestRaw);
@@ -70,7 +89,7 @@ export function createPublicReviews({redis,store,tokenSha256,now=Date.now,makeId
   const owner=hash(p.principalId);
   if(!await store.limit('review-'+request.method+':'+owner,request.method==='POST'?6:180))return error(429,'RATE_LIMITED');
   if(request.method==='GET'){
-   if(url.searchParams.get('action')==='cases')return reply(200,{reviews:(await redis.lRange(PREFIX+'history:'+owner,0,19)).map(raw=>JSON.parse(raw)),retention:'Most recent 20 reviews for 30 days; full public cases persist on the protected node.'});
+   if(url.searchParams.get('action')==='cases')return reply(200,{reviews:(await redis.lRange(PREFIX+'history:'+owner,0,19)).map(raw=>JSON.parse(raw)),retention:'Most recent 20 reviews for 30 days after the latest completed review. Download a copy for longer retention.'});
    const requestId=url.searchParams.get('request_id');if(!id(requestId))return error(404,'REQUEST_NOT_FOUND');
    const raw=await redis.get(PREFIX+requestId);if(!raw)return error(410,'ENGINE_REQUEST_EXPIRED');const job=JSON.parse(raw);
    if(job.owner!==owner)return error(404,'REQUEST_NOT_FOUND');if(job.expiresAt<=now())return error(410,'ENGINE_REQUEST_EXPIRED');
@@ -90,6 +109,16 @@ export function createPublicReviews({redis,store,tokenSha256,now=Date.now,makeId
   const token=request.headers.get('authorization')||'';
   if(!/^Bearer [A-Za-z0-9_-]{43}$/.test(token)||!timingSafeEqual(createHash('sha256').update(token.slice(7)).digest(),Buffer.from(tokenSha256,'hex')))return error(401,'MACHINE_AUTHENTICATION_REQUIRED');
   const path=new URL(request.url).pathname;
+  if(path==='/internal/public-work/claim'){
+   if(!exact(await read(request,64),[]))return error(400,'INVALID_CLAIM');
+   const lease=makeId();if(!id(lease))throw Error('INVALID_LEASE');
+   const raw=await redis.eval(CLAIM_NEXT,{keys:[ENGINE_PREFIX+'queue',PREFIX+'queue'],arguments:[ENGINE_PREFIX,PREFIX,String(now()),lease]});
+   if(!raw)return reply(200,{status:'idle'});const j=JSON.parse(raw);
+   const identity={id:j.id,lease,created_at:new Date(j.createdAt).toISOString(),claimed_at:new Date(j.claimedAt).toISOString(),expires_at:new Date(j.expiresAt).toISOString()};
+   if(j.domain&&Object.hasOwn(DOMAINS,j.domain))return reply(200,{status:'claimed',job:{...identity,domain:j.domain,case_key:j.caseKey,operation:'public_source_review'}});
+   if(j.operation==='public_btc_evidence_check'&&j.asset==='btc')return reply(200,{status:'claimed',job:{...identity,operation:j.operation,asset:j.asset}});
+   throw Error('INVALID_WORK_OPERATION');
+  }
   if(path==='/internal/public-review/claim'){
    if(!exact(await read(request,64),[]))return error(400,'INVALID_CLAIM');
    const lease=makeId();if(!id(lease))throw Error('INVALID_LEASE');

@@ -2,17 +2,24 @@
 export const reviewTitles={property:'Property records and evidence gaps',business:'Business activity and evidence gaps',traditional_finance:'Interest rates and inflation'};
 export const escapeHtml=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function dateLabel(value,withTime=false){
+ if(typeof value==='string'&&/^\d{4}$/.test(value))return value;
  if(!value||!Number.isFinite(Date.parse(value)))return 'Date not supplied';
  if(/^\d{4}-\d{2}$/.test(value))return new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(value+'-01T00:00:00Z'));
  return new Intl.DateTimeFormat('en-US',withTime?{dateStyle:'medium',timeStyle:'short',timeZone:'UTC'}:{dateStyle:'medium',timeZone:'UTC'}).format(new Date(value))+(withTime?' UTC':'');
 }
 const metrics={BC_3MONTH:'3-month U.S. Treasury reference yield',BC_2YEAR:'2-year U.S. Treasury reference yield',BC_10YEAR:'10-year U.S. Treasury reference yield',BC_30YEAR:'30-year U.S. Treasury reference yield','CPI-U all items US city average, not seasonally adjusted':'U.S. consumer price index (CPI-U)'};
 const sources={'treasury-2026':'U.S. Treasury — reference yields','bls-cpi':'Bureau of Labor Statistics — consumer prices'};
-export function observationLabel(o){return metrics[o.metric]||String(o.metric).replaceAll('_',' ');}
-export function observationValue(o){return o.unit==='percent_par_yield'?o.value+'%':o.value+' '+(o.unit==='index_1982_1984_100'?'index points (1982–84 = 100)':String(o.unit).replaceAll('_',' '));}
+const propertyLabels={'EV-PID-IDENTITY':'Property identification','EV-PID-DOC':'Property identification documents','EV-OWN-RECORDED':'Recorded ownership','EV-TTL-RECORDS':'Title records','EV-TAX-ACCOUNT':'Property tax account','EV-TAX-TITLE':'Tax and title records','EV-MKT-COMPARABLES':'Comparable property sales','EV-MKT-PROPERTY':'Property market evidence','EV-RNT-MARKET':'Local rental market','EV-RNT-PROPERTY':'Property rental evidence','EV-ZON-CODE':'Zoning rules','EV-ZON-JURISDICTION':'Zoning authority','EV-PERMIT-RECORDS':'Permit records','EV-HOA-ASSOCIATION':'Homeowners association','EV-HOA-DOCUMENTS':'Association documents','EV-HAZ-EXPOSURE':'Hazard exposure','EV-HAZ-ENV':'Environmental hazards','EV-INS-PROPERTY':'Property insurance','EV-INS-HAZARD':'Insurance and hazards','EV-INS-CONDITION':'Insurance and property condition','EV-PHY-CONDITION':'Physical condition','EV-DMG-EVENT':'Recorded damage events','EV-DMG-CURRENT':'Current damage','EV-ACC-LEGAL':'Legal access','EV-ACC-PROPERTY':'Physical access','EV-UTL-SERVICE':'Utility service','EV-UTL-JURISDICTION':'Utility service authority','EV-SCH-DISTRICT':'School district','EV-SCH-ASSIGNMENT':'School assignment','EV-FIN-BASIS':'Financial assumptions','EV-FIN-MARKET':'Financial market context','EV-FIN-RISK':'Financial risks'};
+export function observationLabel(o){return propertyLabels[o.metric]||metrics[o.metric]||String(o.metric).replaceAll('_',' ');}
+export function observationValue(o){
+ if(o.unit==='planning_state')return 'Not verified for this property';
+ if(o.unit==='appraisal_year')return String(o.value)+' appraisal-year label';
+ if(o.unit==='USD'&&/^-?\d+(?:\.\d+)?$/.test(String(o.value)))return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(o.value));
+ return o.unit==='percent_par_yield'?o.value+'%':o.value+' '+(o.unit==='index_1982_1984_100'?'index points (1982–84 = 100)':o.unit==='thousand_USD'?'thousand U.S. dollars':String(o.unit).replaceAll('_',' '));
+}
 export function sourceLabel(s){if(sources[s.source_id])return sources[s.source_id];try{return new URL(s.source_url).hostname.replace(/^www\./,'');}catch{return 'Source record';}}
 export function safeSourceUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password?u.href:null;}catch{return null;}}
-const freshness=value=>({within_review_window:'Within the source review window',stale:'Older evidence — refresh needed',historical:'Historical record'}[value]||'Freshness: '+String(value??'not supplied').replaceAll('_',' '));
+const freshness=value=>({within_review_window:'Within the source review window',stale:'Older evidence — refresh needed',historical:'Historical record',historical_context_only:'Historical context only',refresh_due:'Source has not been refreshed for this review',observation_date_unknown:'Observation date is unknown',future_observation:'Future-dated record — not current evidence',future_retrieval:'Retrieval date needs verification'}[value]||'Freshness: '+String(value??'not supplied').replaceAll('_',' '));
 export function overview(r){
  const counts=`${r.observations.length} reported measure${r.observations.length===1?'':'s'} from ${r.sources.length} source${r.sources.length===1?'':'s'}`;
  const scope={traditional_finance:'This review brings together dated Treasury reference yields and consumer-price records. It describes those records; it does not predict returns or tell you what to buy.',business:'This review brings together the public business records listed below. It does not establish a company valuation, future revenue, or the financial condition of your business.',property:'This review shows the public property evidence available in this workspace. It does not establish current market value, legal ownership, or the condition of a specific property.'}[r.domain];
