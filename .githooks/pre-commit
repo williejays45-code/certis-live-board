@@ -1,0 +1,3 @@
+#!/bin/sh
+# Repository-local staged guard; no network, key access, paid tests or deployment.
+exec node tools/maintenance/check.mjs --staged

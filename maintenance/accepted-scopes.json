@@ -1,0 +1,18 @@
+[
+  {
+    "id": "certis-historical-scope-20261016",
+    "feature": "automatic public Bitcoin evidence flow",
+    "environment": "production",
+    "status": "PASS",
+    "recorded_on": "2026-10-16",
+    "evidence_level": "reported",
+    "release_identity": null,
+    "evidence_ref": "Maintainer-supplied dated production checkpoint; underlying private receipt is not published here.",
+    "not_covered": [
+      "Paid membership lifecycle",
+      "Broader cross-service assessments",
+      "Present liveness"
+    ],
+    "note": "Historical scoped acceptance preserved. Missing exact release binding must be recovered from receipts, not paid retesting."
+  }
+]

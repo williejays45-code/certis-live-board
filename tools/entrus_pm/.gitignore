@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.test-tmp/
+evidence/
+dist/
+*.zip
+local-inventory/

@@ -1,0 +1,77 @@
+{
+  "schema": "entrus-pm/policy/1",
+  "inventory_complete": false,
+  "runtime_max_age_seconds": 900,
+  "evidence_max_age_seconds": {
+    "tests": 604800,
+    "security": 86400,
+    "contracts": 604800,
+    "config": 900,
+    "rollback": 86400,
+    "authorization": 3600,
+    "deployment": 900,
+    "customer": 3600
+  },
+  "targets": [
+    {
+      "id": "certis-web",
+      "repository": "williejays45-code/certis-live-board",
+      "branch": "main",
+      "environment": "production",
+      "service": "srv-db16eonavr4c73ag9qtg",
+      "deployment_mapping_verified": true,
+      "collectors": [
+        "protected-ci",
+        "operator-reviewed-live"
+      ]
+    },
+    {
+      "id": "certis-bridge",
+      "repository": "williejays45-code/certis-live-board",
+      "branch": "codex/protected-evidence-bridge",
+      "environment": "production",
+      "service": "srv-db2cnbnlot8c73enr8r0",
+      "deployment_mapping_verified": true,
+      "collectors": [
+        "protected-ci",
+        "operator-reviewed-live"
+      ]
+    },
+    {
+      "id": "landitrus-engine",
+      "repository": "williejays45-code/landrix",
+      "branch": "master",
+      "environment": "production",
+      "service": "landitrus-engine",
+      "deployment_mapping_verified": false,
+      "collectors": [
+        "protected-ci",
+        "operator-reviewed-live"
+      ]
+    },
+    {
+      "id": "landitrus-web",
+      "repository": "williejays45-code/landrix",
+      "branch": "master",
+      "environment": "production",
+      "service": "firebase-hosting-unreconciled",
+      "deployment_mapping_verified": false,
+      "collectors": [
+        "protected-ci",
+        "operator-reviewed-live"
+      ]
+    },
+    {
+      "id": "entrus-core-era",
+      "repository": "williejays45-code/entrusarts",
+      "branch": "main",
+      "environment": "production",
+      "service": "core-runtime-unreconciled",
+      "deployment_mapping_verified": false,
+      "collectors": [
+        "protected-ci",
+        "operator-reviewed-live"
+      ]
+    }
+  ]
+}

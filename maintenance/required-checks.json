@@ -1,0 +1,13 @@
+{
+  "repository": "williejays45-code/certis-live-board",
+  "branch": "main",
+  "desired_contexts": [
+    "maintenance-policy",
+    "test",
+    "browser-client-tests"
+  ],
+  "enforce_admins": true,
+  "strict": true,
+  "status": "NOT_APPLIED",
+  "note": "Read and merge with existing branch protections; workflow presence alone is not mandatory merge enforcement. This is a settings proposal, not a passing receipt."
+}
