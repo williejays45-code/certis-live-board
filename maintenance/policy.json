@@ -1,0 +1,233 @@
+{
+  "schema": "entrus.maintenance.v1",
+  "repository": "williejays45-code/certis-live-board",
+  "default_branch": "main",
+  "controls": [
+    {
+      "id": "P01",
+      "name": "State claims must match evidence",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P02",
+      "name": "One source-to-production lineage",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "maintenance-guard"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P03",
+      "name": "Preserve acceptance and execute the next authorized step",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "maintenance-guard"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P04",
+      "name": "Preflight the actual execution context",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P05",
+      "name": "Actionable diagnostics without secrets",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P06",
+      "name": "Real contracts at every boundary",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "auth-contracts",
+        "evidence-and-privacy"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P07",
+      "name": "Privacy boundary and isolation",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "evidence-and-privacy"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P08",
+      "name": "Consent, durable state and honest transaction semantics",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "request-lifecycle"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P09",
+      "name": "Credential lifecycle without unnecessary recreation",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P10",
+      "name": "Scope protection to the intended surface",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "auth-contracts"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P11",
+      "name": "Privilege windows and recovery defined before mutation",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P12",
+      "name": "Concrete cross-session handoff",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P13",
+      "name": "Acceptance proves the named customer behavior",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "customer-state"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P14",
+      "name": "Release verification is isolated and representative",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P15",
+      "name": "Metrics mean what their labels say",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P16",
+      "name": "Evidence freshness and acquisition are explicit",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "evidence-and-privacy"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P17",
+      "name": "Independent request lifecycle, cold starts and server leases",
+      "mode": "regression_and_guidance",
+      "suite_ids": [
+        "request-lifecycle"
+      ],
+      "limit": "Mapped files cover selected fixture behavior only; full control-family and production acceptance require separate scoped evidence."
+    },
+    {
+      "id": "P18",
+      "name": "Inspect the sealed release and consistent version identity",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    },
+    {
+      "id": "P19",
+      "name": "Bounded outbound fetching and connection identity",
+      "mode": "guidance_only",
+      "suite_ids": [],
+      "limit": "Requires development review or protected runtime/infrastructure access; not mechanically certified by this repository gate."
+    }
+  ],
+  "suites": [
+    {
+      "id": "auth-contracts",
+      "cwd": ".",
+      "runner": "node",
+      "files": [
+        "backend/application.test.mjs",
+        "backend/oidc.test.mjs",
+        "backend/auth-diagnostics.test.mjs"
+      ],
+      "controls": [
+        "P06",
+        "P10"
+      ]
+    },
+    {
+      "id": "evidence-and-privacy",
+      "cwd": ".",
+      "runner": "node",
+      "files": [
+        "bridge/query.test.mjs",
+        "backend/engine-evidence.test.mjs",
+        "backend/model-explanation.test.mjs",
+        "backend/public-evidence.test.mjs"
+      ],
+      "controls": [
+        "P06",
+        "P07",
+        "P16"
+      ]
+    },
+    {
+      "id": "request-lifecycle",
+      "cwd": ".",
+      "runner": "node",
+      "files": [
+        "backend/engine-requests.test.mjs",
+        "backend/public-work.test.mjs",
+        "backend/public-reviews.test.mjs",
+        "app/engine-request-client.test.mjs",
+        "app/public-review-recovery.test.mjs"
+      ],
+      "controls": [
+        "P08",
+        "P17"
+      ]
+    },
+    {
+      "id": "customer-state",
+      "cwd": ".",
+      "runner": "node",
+      "files": [
+        "app/account-client.test.mjs",
+        "app/bridge-client.test.mjs",
+        "app/review-presentation.test.mjs",
+        "app/homepage-client.test.mjs"
+      ],
+      "controls": [
+        "P13"
+      ]
+    },
+    {
+      "id": "maintenance-guard",
+      "cwd": ".",
+      "runner": "node",
+      "files": [
+        "tools/maintenance/check.test.mjs"
+      ],
+      "controls": [
+        "P02",
+        "P03"
+      ]
+    }
+  ]
+}

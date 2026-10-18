@@ -8,7 +8,11 @@
   },
   "scripts": {
     "start": "node backend/server.mjs",
-    "test": "node --test bridge/query.test.mjs app/*.test.mjs backend/*.test.mjs"
+    "test": "node --test bridge/query.test.mjs app/*.test.mjs backend/*.test.mjs",
+    "maintenance:check": "node tools/maintenance/check.mjs",
+    "maintenance:test": "node --test tools/maintenance/check.test.mjs",
+    "maintenance:contracts": "node tools/maintenance/run-contracts.mjs",
+    "maintenance:install-hook": "node tools/maintenance/install-hook.mjs"
   },
   "dependencies": {
     "openid-client": "6.8.8",
