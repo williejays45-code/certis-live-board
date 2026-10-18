@@ -1,0 +1,29 @@
+name: Preventive maintenance
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  maintenance-policy:
+    name: maintenance-policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify guard rejection and hook preservation
+        run: node --test tools/maintenance/check.test.mjs
+      - name: Validate current change and preserve acceptance history
+        env:
+          MAINTENANCE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node tools/maintenance/check.mjs --base "$MAINTENANCE_BASE"
