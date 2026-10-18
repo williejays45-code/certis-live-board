@@ -15,9 +15,9 @@ from pm import engine as e
 
 ROOT=Path(__file__).resolve().parent
 FILES=[".gitignore","README.md","ci.py","build_release.py","pm/__init__.py","pm/__main__.py","pm/engine.py",
-       "tests/test_engine.py","tests/test_ci.py","examples/build_fixture.py","config/fleet-policy.json",
+       "tests/test_engine.py","tests/test_ci.py","tests/test_git_modes.py","examples/build_fixture.py","config/fleet-policy.json",
        "integration/entrus-maintenance.yml","docs/CONTROL_COVERAGE.md","docs/ROLLOUT.md",
-       "docs/SOFTWARE.md","docs/CHATGPT_REVIEW_HANDOFF.md","docs/DIAGNOSTICS.md"]
+       "docs/SOFTWARE.md","docs/CHATGPT_REVIEW_HANDOFF.md","docs/DIAGNOSTICS.md","docs/GIT_MODE_FOLLOWUP.md"]
 
 
 def main():

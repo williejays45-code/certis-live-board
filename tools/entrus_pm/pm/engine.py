@@ -15,7 +15,7 @@ import stat
 from datetime import datetime, timezone
 import zipfile
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 MAX_INPUT = 8 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
@@ -306,6 +306,31 @@ def scan(root: Path, paths):
             locations.append(digest(name.encode()))
     return report("scan", codes, checked_files=count, location_hashes=sorted(set(locations)),
                   coverage="limited_pattern_scan_not_DLP")
+
+
+def git_scan(root: Path, paths):
+    """Reject unsupported Git index kinds even when Windows checks links out as text.
+
+    Read index metadata before content; never follow a link or a submodule. The
+    filesystem guard remains necessary for unstaged links and junctions.
+    """
+    import subprocess
+    raw = subprocess.run(["git", "-C", str(root), "ls-files", "--stage", "-z"],
+                         check=True, capture_output=True, timeout=30).stdout
+    if len(raw) > 16 * 1024 * 1024:
+        raise Invalid("GIT_INDEX_LIMIT")
+    entries = {}
+    for record in raw.decode("utf-8", errors="strict").split("\0"):
+        if not record:
+            continue
+        metadata, name = record.split("\t", 1)
+        mode, _object_id, stage = metadata.split()
+        entries.setdefault(name, []).append((mode, stage))
+    for name in paths:
+        kinds = entries.get(name)
+        if not kinds or len(kinds) != 1 or kinds[0][0] not in ("100644", "100755") or kinds[0][1] != "0":
+            raise Invalid("GIT_ENTRY_KIND_NOT_ALLOWED")
+    return scan(root, paths)
 
 
 def fleet(policy, observations, clock=None):

@@ -89,10 +89,10 @@ class CITests(unittest.TestCase):
         ci=self.run_ci({"pull_request":{"base":{"sha":base}}})
         self.assertIn("T\ttype-change.txt",self.git("diff","--name-status",base,"HEAD"))
         self.assertEqual(ci.returncode,2)
-        self.assertEqual(json.loads(ci.stdout)["codes"],["CI_SCAN_UNAVAILABLE"])
+        self.assertEqual(json.loads(ci.stdout)["codes"],["GIT_ENTRY_KIND_NOT_ALLOWED"])
         cli=self.scan_cli(base)
         self.assertEqual(cli.returncode,2)
-        self.assertEqual(json.loads(cli.stdout)["codes"],["LINK_NOT_ALLOWED"])
+        self.assertEqual(json.loads(cli.stdout)["codes"],["GIT_ENTRY_KIND_NOT_ALLOWED"])
 
     def test_symlink_to_regular_secret_is_scanned_by_both_producers(self):
         base=self.type_change(old_link=True)

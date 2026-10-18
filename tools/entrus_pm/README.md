@@ -1,11 +1,11 @@
-# EnTrus Preventive Maintenance Engine 0.1.1
+# EnTrus Preventive Maintenance Engine 0.1.2
 
 This is an executable, offline maintenance gate built from the CERTIS/LANDITRUS
 incident audits. It preserves successful acceptance and rejects incomplete release
 claims. It has no service restart, sign-in, secret rotation, database repair,
 payment, provider-call or deployment capability.
 
-Version 0.1.1 fixes unverified fleet mappings being counted as enforced, omitted
+Version 0.1.2 fixes unverified fleet mappings being counted as enforced, omitted
 Git type-change scans, and ZIP file/directory ancestor conflicts. It also fixes ZIP
 creator metadata for consistent Windows/Linux packaging. These repairs add no
 production credentials, deployment hook, or automatic repair authority.
