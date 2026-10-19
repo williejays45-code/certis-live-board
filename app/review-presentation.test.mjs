@@ -25,3 +25,9 @@ test('unsafe and credential-bearing source links are not clickable',()=>{
 test('contrary evidence and unresolved model concerns survive presentation',()=>{
  const r=fixture();r.contrary_evidence=['A conflicting source exists.'];r.model_explanation={status:'accepted',model:'test',assertions:[],missing_evidence:[],alternative_hypotheses:['Alternative explanation'],unresolved_conflicts:['Unresolved conflict'],next_steps:['Verify']};const html=reviewMarkup(r);for(const text of ['A conflicting source exists.','Alternative explanation','Unresolved conflict','not actions taken'])assert.ok(html.includes(text));
 });
+
+test('dated source-linked finance arithmetic renders separately and escapes hostile strings',()=>{
+ const r=fixture();r.calculations=[{metric:'U.S. Treasury 10-year minus 2-year reference yield',value:'44',unit:'basis_points',observation_date:'2026-10-09',source_id:'treasury-2026',evidence_ids:['public-a','public-b'],method:'10Y minus 2Y',freshness:'stale',scope:'descriptive_arithmetic_only',assessment_state:'not_supported',financial_action_authority:'none'}];
+ const html=reviewMarkup(r);assert.match(html,/Dated reference comparisons/);assert.match(html,/44 basis points/);assert.match(html,/Older evidence/);assert.match(html,/not an investment assessment/);
+ r.calculations[0].metric='<img src=x onerror=alert(1)>';const escaped=reviewMarkup(r);assert.ok(!escaped.includes('<img'));assert.match(escaped,/&lt;img/);
+});
