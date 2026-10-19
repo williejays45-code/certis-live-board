@@ -1,4 +1,5 @@
 import {validateModelExplanation} from './model-explanation.mjs';
+import {deriveFinancialReferences,financialEvidenceGaps} from './financial-intelligence.mjs';
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {readCookie,SESSION_COOKIE} from './security.mjs';
@@ -70,10 +71,15 @@ export function projectReview(value,job,now){
  const expected=selected.flatMap(s=>s.observations.map(o=>o.evidence_id)).sort();
  if(!Array.isArray(value.evidence_ids)||JSON.stringify([...value.evidence_ids].sort())!==JSON.stringify(expected))throw Error('REVIEW_ATTRIBUTION');
  const sources=selected.map(s=>({source_id:s.source_id,source_url:s.source_url,retrieved_at:s.retrieved_at,observation_date:s.observation_date,raw_sha256:s.raw_sha256,limitations:s.limitations,freshness:freshness(s,now)}));
+ // Finance arithmetic uses only immutable, manifest-pinned public source observations.
+ // A new review never turns old source observations into current market evidence.
+ const calculations=job.domain==='traditional_finance'?deriveFinancialReferences(selected,sources):[];
+ const financialGaps=job.domain==='traditional_finance'?financialEvidenceGaps(sources,calculations):[];
  return {schema:'certis-public-review/1',domain:job.domain,case_id:value.case_id,request_id:job.id,generated_at:value.generated_at,engine_version:'3.24.0',assessment_state:'not_supported',evidence_strength:null,evidence_threshold:75,
  observations:selected.flatMap(s=>s.observations.map(o=>({...o,source_id:s.source_id,freshness:freshness(s,now)}))),sources,
+ ...(job.domain==='traditional_finance'?{calculations}:{}),
  inferences:[],contrary_evidence:[],contradiction_check:'not_independently_reconciled',
- missing_evidence:['Independent corroboration and a defensible assessment score remain unestablished.',...sources.flatMap(s=>s.limitations)],
+ missing_evidence:['Independent corroboration and a defensible assessment score remain unestablished.',...financialGaps,...sources.flatMap(s=>s.limitations)],
  next_watch:['Refresh sources when due and acquire independent evidence before drawing a financial conclusion.'],
  evaluation_scope:'Reference and authority checks passed; this does not establish truth, independence, or a 75-point assessment.',
  financial_action_authority:'none',provider_called:model?model.provider_called:false,private_context:false,...(model?{model_explanation:validateModelExplanation(model,expected)}:{})};
