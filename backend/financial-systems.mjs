@@ -11,7 +11,7 @@ const unique=arr=>new Set(arr).size===arr.length;
 const fail=code=>{throw Error(code);};
 const result=(kind,data)=>Object.freeze({schema:'certis-financial-research/1',kind,assessment_state:'not_supported',evidence_strength:null,financial_action_authority:AUTH,...data});
 
-// (1) Exact, allowlisted public financial evidence boundary. Data is caller-supplied:
+// (1) Closed structural financial evidence boundary. Data is caller-supplied:
 // admission is structural, NOT certification that the publisher or prices are truthful.
 export function admitPublicFinancialObservations(records,asOf){
   if(!preciseDay(asOf)||!Array.isArray(records)||records.length>100)fail('SOURCE_SCOPE');
@@ -64,7 +64,9 @@ export function reconcileEvidenceClaims(claims,observations){
        !unique([...c.evidence_ids,...c.contrary_ids])||![...c.evidence_ids,...c.contrary_ids].every(x=>typeof x==='string'&&ID.test(x)))fail('CLAIM_SCHEMA');
     const missing=c.evidence_ids.filter(x=>!byId.has(x));
     const unknownContrary=c.contrary_ids.filter(x=>!byId.has(x));
-    return {id:c.id,kind:c.kind,linked_evidence:c.evidence_ids.filter(x=>byId.has(x)),missing_evidence:missing,contrary_evidence:c.contrary_ids.filter(x=>byId.has(x)),missing_contrary_references:unknownContrary,eligible_for_scoring:c.kind==='fact'&&c.evidence_ids.length>0&&!missing.length&&!unknownContrary.length&&!c.contrary_ids.length};
+    return {id:c.id,kind:c.kind,linked_evidence:c.evidence_ids.filter(x=>byId.has(x)),missing_evidence:missing,contrary_evidence:c.contrary_ids.filter(x=>byId.has(x)),missing_contrary_references:unknownContrary,
+      structural_linkage_complete:c.evidence_ids.length>0&&!missing.length&&!unknownContrary.length,
+      eligible_for_scoring:false}; // Caller IDs cannot qualify authenticity or scoring.
   });
   if(!unique(checks.map(x=>x.id)))fail('DUPLICATE_CLAIM');
   return result('evidence_reconciliation',{checks,scoring_model:null,threshold_75_not_evaluated:true});
@@ -87,6 +89,13 @@ export function compareFinancialRelationships({changes,relationships,evidenceIds
     return {from:edge.from,to:edge.to,implied_delta_bps:supplied===undefined?null:(BigInt(supplied)*BigInt(edge.sensitivityBps)/10000n).toString(),basis:edge.basis};
   });
   if(!unique(outcomes.map(x=>x.from+'>'+x.to)))fail('DUPLICATE_RELATION');
+  const graph=new Map(),active=new Set(),visited=new Set();
+  for(const edge of outcomes){if(!graph.has(edge.from))graph.set(edge.from,[]);graph.get(edge.from).push(edge.to);}
+  const visit=node=>{
+    if(active.has(node))fail('CIRCULAR_RELATION');if(visited.has(node))return;
+    active.add(node);for(const next of graph.get(node)||[])visit(next);active.delete(node);visited.add(node);
+  };
+  for(const node of graph.keys())visit(node);
   return result('financial_relationships',{outcomes,evidence_ids:[...evidenceIds],transmission:'one_step_non_compounding',causality:'not_established',probability:'not_established'});
 }
 

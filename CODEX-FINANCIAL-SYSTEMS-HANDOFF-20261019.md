@@ -36,3 +36,7 @@ Preserve P01–P19; distinguish guidance-only from CI enforced. No private datab
 **Implemented:** research primitives and synthetic regression tests in a protected draft candidate.
 **Not implemented:** live multi-source data acquisition, calibrated scoring, live alert delivery, a validated predictive system, protected runtime installation, billing or production activation.
 **Next gate:** PR CI plus technical review, then independent source qualification. 
+
+## Codex source follow-up — October 19, 2026
+
+See `FINANCIAL-SOURCE-QUALIFICATION-20261019.md` for the isolated connector candidate, observed Treasury/BLS GET receipts, missing-data analysis contracts, per-assumption relationship attribution, offline monitoring policy, scoring evaluation proposal and staging acceptance plan. The follow-up preserves this handoff's unactivated/unscored status and historical acceptance. Live retrieval does not close historical accuracy, licensing, protected-runtime or delivery gates.

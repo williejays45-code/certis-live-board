@@ -39,3 +39,12 @@ test('monitor evaluates candidate only and never claims a sent notification',()=
  assert.equal(a.triggered,true);assert.equal(a.change_bps,'500');assert.equal(a.notification_sent,false);assert.equal(a.source_freshness,'not_verified');
  const b=evaluateMonitoringCandidates({previous:'0',current:'10500',thresholdBps:500,subject:'tenyear_yield',evidenceIds:[id]});assert.equal(b.reason,'ZERO_BASELINE');assert.equal(b.triggered,false);
 });
+test('structural references alone never confer eligibility for protected scoring',()=>{
+ const r=reconcileEvidenceClaims([{id:'claim.alpha',kind:'fact',evidence_ids:[id],contrary_ids:[]}],[{id}]);
+ assert.equal(r.checks[0].structural_linkage_complete,true);assert.equal(r.checks[0].eligible_for_scoring,false);
+});
+test('circular declared assumptions are rejected even when only one step would be computed',()=>{
+ const edge=(from,to)=>({from,to,sensitivityBps:10000,basis:'declared_scenario_assumption'});
+ assert.throws(()=>compareFinancialRelationships({changes:[{node:'rates',deltaBps:100}],
+  relationships:[edge('rates','credit'),edge('credit','bonds'),edge('bonds','rates')],evidenceIds:[id]}),/CIRCULAR_RELATION/);
+});
