@@ -1,0 +1,198 @@
+{
+  "fixture_classification": "SYNTHETIC_ONLY_NOT_CUSTOMER_DATA",
+  "context": {
+    "principalId": "TEST-ONLY-OWNER-001",
+    "sessionId": "TEST-ONLY-SESSION-001",
+    "requestId": "TEST-ONLY-SAVED-REVIEW-001",
+    "authorityId": "TEST-ONLY-AUTHORITY-001"
+  },
+  "report": {
+    "reportId": "TEST-ONLY-REPORT-001",
+    "status": "COMPLETE",
+    "address": "NOT A REAL PROPERTY",
+    "generatedAt": "2026-10-07T12:01:00.000Z",
+    "verification": "UNQUALIFIED_TEST_REPORT",
+    "provenance": {
+      "principalId": "TEST-ONLY-OWNER-001",
+      "sessionId": "TEST-ONLY-SESSION-001",
+      "requestId": "TEST-ONLY-SAVED-REVIEW-001",
+      "authorityId": "TEST-ONLY-AUTHORITY-001"
+    },
+    "derivationFingerprint": "TEST-ONLY",
+    "sections": [],
+    "traces": {},
+    "evidence": [
+      {
+        "evidenceObjectId": "TEST-ONLY-SAVED-EO-001",
+        "addressKey": "not-exported-test-address-key",
+        "sourceProviderId": "TEST-ONLY-UNQUALIFIED",
+        "sourceCategory": "APPRAISAL_DISTRICT",
+        "sourceRecordId": "TEST-ONLY-RECORD-001",
+        "sourceUri": "https://example.invalid/never-fetch",
+        "acquiredAt": "2026-10-07T12:00:00.000Z",
+        "observedAt": "2026-10-07T11:00:00.000Z",
+        "verificationState": "UNQUALIFIED_TEST_METADATA",
+        "recencyState": "ORIGINAL_SAVED_STATE",
+        "findings": [
+          {
+            "code": "TEST-ONLY-PARCEL-MENTION",
+            "established": true,
+            "independence": "UNKNOWN"
+          }
+        ],
+        "serializationProfile": "jcs-rfc8785+sha256:v1",
+        "schemaVersionId": "TEST-ONLY-SCHEMA-1",
+        "schemaHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "adapterVersion": "TEST-ONLY-ADAPTER-1",
+        "payloadHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "payloadRef": "test-only://never-fetch/private-payload",
+        "authorityLimitations": [
+          "SYNTHETIC_FIXTURE_NOT_REAL_PROPERTY",
+          "NOT_A_MARKET_PRICE",
+          "Café fixture 🧪"
+        ],
+        "numericFacts": [
+          {
+            "factType": "ASSESSED_VALUE",
+            "label": "Synthetic assessed value",
+            "value": "123.45",
+            "unit": "USD",
+            "periodType": "APPRAISAL_YEAR",
+            "periodValue": "2026",
+            "derivation": "SOURCE_REPORTED"
+          }
+        ],
+        "temporal": {
+          "assessmentYear": "2026",
+          "sourceUpdateDate": "2026-10-01"
+        }
+      }
+    ],
+    "acquisition": [
+      {
+        "sourceId": "TEST-ONLY-UNQUALIFIED",
+        "required": true,
+        "status": "COMPLETE",
+        "evidenceCount": 1,
+        "message": "TEST ONLY PRIVATE MESSAGE: NOT EXPORTED"
+      }
+    ]
+  },
+  "consent": {
+    "approved": true,
+    "purpose": "READ_ONLY_REVIEW",
+    "consumer": "CERTIS",
+    "reportSha256": "678653322a87ea59d78baddd83d86f5af5060373b0ee18b7e137978ece9c5286"
+  },
+  "packet": {
+    "schema": "landitrus-saved-evidence/1",
+    "request_id": "TEST-ONLY-SAVED-REVIEW-001",
+    "producer": "LANDITRUS",
+    "consumer": "ENTRUS_CORE",
+    "purpose": "READ_ONLY_REVIEW",
+    "data_classification": "OWNER_PRIVATE",
+    "issued_at": "2026-10-20T12:00:00.000Z",
+    "report": {
+      "report_id": "TEST-ONLY-REPORT-001",
+      "report_sha256": "678653322a87ea59d78baddd83d86f5af5060373b0ee18b7e137978ece9c5286",
+      "generated_at": "2026-10-07T12:01:00.000Z"
+    },
+    "authorization": {
+      "purpose": "READ_ONLY_REVIEW",
+      "consumer": "CERTIS",
+      "report_sha256": "678653322a87ea59d78baddd83d86f5af5060373b0ee18b7e137978ece9c5286",
+      "request_id": "TEST-ONLY-SAVED-REVIEW-001"
+    },
+    "evidence": [
+      {
+        "evidenceObjectId": "TEST-ONLY-SAVED-EO-001",
+        "sourceProviderId": "TEST-ONLY-UNQUALIFIED",
+        "sourceCategory": "APPRAISAL_DISTRICT",
+        "sourceRecordId": "TEST-ONLY-RECORD-001",
+        "acquiredAt": "2026-10-07T12:00:00.000Z",
+        "observedAt": "2026-10-07T11:00:00.000Z",
+        "verificationState": "UNQUALIFIED_TEST_METADATA",
+        "recencyState": "ORIGINAL_SAVED_STATE",
+        "findings": [
+          {
+            "code": "TEST-ONLY-PARCEL-MENTION",
+            "established": true,
+            "independence": "UNKNOWN"
+          }
+        ],
+        "serializationProfile": "jcs-rfc8785+sha256:v1",
+        "schemaVersionId": "TEST-ONLY-SCHEMA-1",
+        "schemaHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "adapterVersion": "TEST-ONLY-ADAPTER-1",
+        "payloadHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "authorityLimitations": [
+          "SYNTHETIC_FIXTURE_NOT_REAL_PROPERTY",
+          "NOT_A_MARKET_PRICE",
+          "Café fixture 🧪"
+        ],
+        "numericFacts": [
+          {
+            "factType": "ASSESSED_VALUE",
+            "label": "Synthetic assessed value",
+            "value": "123.45",
+            "unit": "USD",
+            "periodType": "APPRAISAL_YEAR",
+            "periodValue": "2026",
+            "derivation": "SOURCE_REPORTED"
+          }
+        ],
+        "temporal": {
+          "assessmentYear": "2026",
+          "sourceUpdateDate": "2026-10-01"
+        }
+      }
+    ],
+    "acquisition": [
+      {
+        "sourceId": "TEST-ONLY-UNQUALIFIED",
+        "required": true,
+        "status": "COMPLETE",
+        "evidenceCount": 1
+      }
+    ]
+  },
+  "review": {
+    "schema": "eue-saved-evidence-review/1",
+    "request_id": "TEST-ONLY-SAVED-REVIEW-001",
+    "producer": "ENTRUS_CORE",
+    "consumer": "CERTIS",
+    "purpose": "READ_ONLY_REVIEW",
+    "data_classification": "OWNER_PRIVATE",
+    "report_id": "TEST-ONLY-REPORT-001",
+    "report_sha256": "678653322a87ea59d78baddd83d86f5af5060373b0ee18b7e137978ece9c5286",
+    "evidence_packet_sha256": "2867485682076208cbb9ae5f5b04c004348fdd6f1d8ce2f9cb2edf74960ca065",
+    "evaluated_at": "2026-10-20T12:00:00.000Z",
+    "state": "HOLD",
+    "knowledge_state": "OUTDATED",
+    "reason_codes": [
+      "SAVED_SOURCE_CERTIFICATION_REQUIRED",
+      "EVIDENCE_OUTDATED"
+    ],
+    "interpretation_executed": false,
+    "claims": [],
+    "source_qualification": "UNREVIEWED",
+    "payload_integrity": "REFERENCED_NOT_FETCHED",
+    "action_authority": "NONE",
+    "financial_action_authority": "NONE",
+    "lineage": [
+      {
+        "evidence_id": "TEST-ONLY-SAVED-EO-001",
+        "source_provider_id": "TEST-ONLY-UNQUALIFIED",
+        "source_record_id": "TEST-ONLY-RECORD-001",
+        "payload_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "acquired_at": "2026-10-07T12:00:00.000Z",
+        "observed_at": "2026-10-07T11:00:00.000Z",
+        "authority_limitations": [
+          "SYNTHETIC_FIXTURE_NOT_REAL_PROPERTY",
+          "NOT_A_MARKET_PRICE",
+          "Café fixture 🧪"
+        ]
+      }
+    ]
+  }
+}

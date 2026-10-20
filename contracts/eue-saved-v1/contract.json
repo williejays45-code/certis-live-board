@@ -1,0 +1,114 @@
+{
+  "schema": "entrus-saved-evidence-contract/1",
+  "max_bytes": 65536,
+  "max_packet_bytes": 24576,
+  "transport_window_seconds": 120,
+  "evidence_max_age_seconds": 86400,
+  "packet_keys": [
+    "schema",
+    "request_id",
+    "producer",
+    "consumer",
+    "purpose",
+    "data_classification",
+    "issued_at",
+    "report",
+    "authorization",
+    "evidence",
+    "acquisition"
+  ],
+  "evidence_keys": [
+    "evidenceObjectId",
+    "sourceProviderId",
+    "sourceCategory",
+    "sourceRecordId",
+    "acquiredAt",
+    "observedAt",
+    "verificationState",
+    "recencyState",
+    "findings",
+    "serializationProfile",
+    "schemaVersionId",
+    "schemaHash",
+    "adapterVersion",
+    "payloadHash",
+    "authorityLimitations"
+  ],
+  "evidence_optional_keys": [
+    "numericFacts",
+    "temporal"
+  ],
+  "source_categories": [
+    "APPRAISAL_DISTRICT",
+    "COUNTY_RECORDS",
+    "TAX_RECORDS",
+    "GIS",
+    "RECORDER",
+    "MLS",
+    "OWNER_DATA",
+    "MARKET_DATA",
+    "HOA",
+    "PERMITS",
+    "LIENS",
+    "ZONING",
+    "FLOOD",
+    "ENVIRONMENTAL",
+    "INSURANCE",
+    "SCHOOLS",
+    "UTILITIES"
+  ],
+  "independence": [
+    "ORIGINAL_AUTHORITY",
+    "INHERITED_FROM_ANOTHER_AUTHORITY",
+    "UNKNOWN"
+  ],
+  "numeric_keys": [
+    "factType",
+    "label",
+    "value",
+    "unit",
+    "periodType",
+    "periodValue",
+    "derivation"
+  ],
+  "fact_types": [
+    "MARKET_VALUE",
+    "PREVIOUS_MARKET_VALUE",
+    "APPRAISED_VALUE",
+    "ASSESSED_VALUE",
+    "LAND_VALUE",
+    "IMPROVEMENT_VALUE",
+    "TAXABLE_VALUE",
+    "CURRENT_TAX_LEVY",
+    "BASE_TAX",
+    "CURRENT_AMOUNT_DUE",
+    "PRIOR_YEAR_AMOUNT_DUE",
+    "TOTAL_AMOUNT_DUE",
+    "PARCEL_SIZE",
+    "LIVING_AREA"
+  ],
+  "units": [
+    "USD",
+    "ACRES",
+    "LOTS",
+    "SQUARE_FEET"
+  ],
+  "period_types": [
+    "APPRAISAL_YEAR",
+    "TAX_YEAR",
+    "PRIOR_PERIOD",
+    "SOURCE_OBSERVATION"
+  ],
+  "derivations": [
+    "SOURCE_REPORTED",
+    "SUM_OF_SOURCE_REPORTED"
+  ],
+  "temporal_keys": [
+    "sourceObservedAt",
+    "sourceUpdateDate",
+    "eventEffectiveDate",
+    "recordedDate",
+    "taxYear",
+    "assessmentYear"
+  ]
+}
