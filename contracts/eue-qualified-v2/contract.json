@@ -1,0 +1,25 @@
+{
+  "schema": "eue-qualified-interpretation-contract/2",
+  "fixture_id": "TEST-ONLY-QUALIFIED-INTERPRETATION-V2",
+  "issuer": "ENTRUS_CORE_QUALIFIED_SYNTHETIC_V2",
+  "audience": "CERTIS_QUALIFIED_SYNTHETIC_REVIEW_V2",
+  "profile_sha256": "0ddd757211dcd42b6c1850f4cc68ee4b9c4befd88e6dab9656f197747b8b6336",
+  "baseline_sha256": "1a54f0169cf4a8b47a091ba739f1edba9f5bf168955694ab8c2a1258f2fa9893",
+  "registry_digest": "7e84937a4f1e17a03876e2ff89b4b1fe370a5bf654f96f7447e5db0a0e5dc1dc",
+  "rule_certification": "13e44eed0ba6501a1e0dcc357a46b18d0b0b62e9288b6930008ce80e5c69ff2f",
+  "policy_certification": "0075ecbc85f6d0c24ff1a4816c779fa2440fb941d89759c0dfb49f11cf08198d",
+  "source_provider_id": "TEST-ONLY-DALLAS-QUALIFICATION",
+  "source_record_id": "TEST-ONLY-PARCEL-Q-001",
+  "producer_evidence_id": "TEST-ONLY-QUALIFIED-EO-001",
+  "payload_sha256": "1a744bbe24c0bb67b47c71e13b9ef45c2712e3f729ca4d0088a08c57da5aa1ca",
+  "report_sha256": "920f89a95ee6512d0abbf0252a5e19d8c8e0d9b12910e009149a0539ca9a30b6",
+  "authority_limitations": [
+    "NOT_REAL_PROPERTY",
+    "NOT_A_COUNTY_SOURCE_APPROVAL",
+    "NO_VALUATION_CONCLUSION"
+  ],
+  "max_bytes": 16384,
+  "transport_window_seconds": 120,
+  "activation_max_seconds": 900,
+  "evidence_max_age_seconds": 86400
+}
