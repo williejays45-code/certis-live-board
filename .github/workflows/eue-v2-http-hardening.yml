@@ -1,0 +1,25 @@
+name: EUE v2 HTTP admission regression
+on:
+  push:
+    branches:
+      - feature/eue-v2-http-hardening-20261021
+  pull_request:
+    paths:
+      - backend/eue-qualified-http-hardening.test.mjs
+      - .github/workflows/eue-v2-http-hardening.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  targeted-v2-http-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Execute only newly added EUE v2 HTTP admission regressions
+        run: node --test --test-reporter=tap backend/eue-qualified-http-hardening.test.mjs
