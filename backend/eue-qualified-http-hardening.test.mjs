@@ -55,7 +55,7 @@ test('expired activation rejects before touching the incoming request',async()=>
   let clock=now;
   const c=consumer(redis,()=>clock);
   clock+=600000;
-  const r=await c.ingest(null);
+  const r=await c.ingest(post('{}'));
   assert.equal(r.status,503);
   assert.equal(redis.entries.size,0);
 });
