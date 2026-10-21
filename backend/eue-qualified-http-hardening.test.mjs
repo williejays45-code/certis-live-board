@@ -51,7 +51,10 @@ test('noncanonical signed body is rejected without creating a review',async()=>{
 });
 
 test('expired activation rejects before touching the incoming request',async()=>{
-  const redis=journal(),c=consumer(redis,()=>now+600000);
+  const redis=journal();
+  let clock=now;
+  const c=consumer(redis,()=>clock);
+  clock+=600000;
   const r=await c.ingest(null);
   assert.equal(r.status,503);
   assert.equal(redis.entries.size,0);
