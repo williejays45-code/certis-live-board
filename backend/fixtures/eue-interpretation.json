@@ -1,0 +1,52 @@
+{
+  "fixture_id": "EUE-SYNTH-PARCEL-001",
+  "request_id": "request-001",
+  "interpretation": {
+    "schema": "eue-interpretation/1",
+    "fixture_id": "EUE-SYNTH-PARCEL-001",
+    "request_id": "request-001",
+    "producer": "ENTRUS_CORE",
+    "consumer": "CERTIS",
+    "purpose": "READ_ONLY_REVIEW",
+    "action_authority": "NONE",
+    "data_classification": "SYNTHETIC",
+    "evaluated_at": "2026-10-20T12:00:00+00:00",
+    "interpretation_executed": true,
+    "knowledge_state": "INFERRED",
+    "claims": [
+      {
+        "term_id": "IDENTITY",
+        "predicate": "parcel_id.exists",
+        "value": "true",
+        "evidence_ids": [
+          "EV-f7ecd029da186d902e6cbc6ea95acdb21c974372c2d5b71460eed2530bc2cee8"
+        ],
+        "state": "INFERRED"
+      }
+    ],
+    "lineage": [
+      {
+        "evidence_id": "EV-f7ecd029da186d902e6cbc6ea95acdb21c974372c2d5b71460eed2530bc2cee8",
+        "producer_evidence_id": "SYNTH-EO-001",
+        "payload_sha256": "7c69b17f4ca2df66824c510093a2863ba452ec271670a2f1aa8aa6add0720312",
+        "source_provider_id": "SYNTHETIC-TEST-ONLY",
+        "source_record_id": "TEST-ONLY-PARCEL-001",
+        "county": "TX-DALLAS",
+        "acquired_at": "2026-10-20T12:00:00+00:00",
+        "observed_at": "2026-10-20T12:00:00+00:00",
+        "authority_limitations": [
+          "NOT_REAL_PROPERTY",
+          "NOT_A_CUSTOMER_REPORT",
+          "NO_VALUATION_CONCLUSION"
+        ]
+      }
+    ],
+    "semantic_id": "d45aa14aa4f38db2fff4826d3ec72b1ff10221c364396c24a948bd2e0472dd2a",
+    "registry_digest": "7e84937a4f1e17a03876e2ff89b4b1fe370a5bf654f96f7447e5db0a0e5dc1dc",
+    "rule_certification": "13e44eed0ba6501a1e0dcc357a46b18d0b0b62e9288b6930008ce80e5c69ff2f",
+    "policy_certification": "0075ecbc85f6d0c24ff1a4816c779fa2440fb941d89759c0dfb49f11cf08198d",
+    "evidence_packet_sha256": "fc3fe2861495c336a889df47bd8eaf6b5e435320e7bb5e152eb661908b3871c7",
+    "state": "REVIEWABLE",
+    "reason_code": "CERTIFIED_READ_ONLY_PROJECTION"
+  }
+}
