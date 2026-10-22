@@ -31,7 +31,7 @@ def run():
         args = ["git", "-C", str(root), "diff", "--name-only", "--diff-filter=ACMRT", "-z", base, "HEAD", "--"]
     raw = subprocess.run(args, check=True, capture_output=True, timeout=30).stdout
     paths = [v for v in raw.decode("utf-8").split("\0") if v]
-    result = e.scan(root, paths)
+    result = e.git_scan(root, paths)
     result["metrics"]["scan_scope"] = "changed_files" if base else "tracked_files"
     result["metrics"]["deployment_verified"] = False
     print(json.dumps(result, sort_keys=True))
@@ -41,6 +41,9 @@ def run():
 if __name__ == "__main__":
     try:
         sys.exit(run())
+    except e.Invalid as err:
+        print(json.dumps(e.report("ci_scan", [str(err)], unknown=True)))
+        sys.exit(2)
     except Exception:
         print(json.dumps(e.report("ci_scan", ["CI_SCAN_UNAVAILABLE"], unknown=True)))
         sys.exit(2)

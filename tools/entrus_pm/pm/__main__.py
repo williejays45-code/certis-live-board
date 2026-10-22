@@ -49,7 +49,14 @@ def main(argv=None):
                     cmd = ["git", "-C", str(a.root), "diff", "--name-only", "--diff-filter=ACMRT", "-z", a.base_ref, "--"]
                 raw = subprocess.run(cmd, check=True, capture_output=True, timeout=30).stdout
                 paths = [v for v in raw.decode("utf-8", errors="strict").split("\0") if v]
-            r = e.scan(a.root, paths)
+                if a.base_ref:
+                    # Inspect index changes too: a Git link materialized as a file
+                    # may appear deleted in the worktree-only comparison.
+                    staged = subprocess.run(["git", "-C", str(a.root), "diff", "--cached",
+                                             "--name-only", "--diff-filter=ACMRT", "-z", a.base_ref, "--"],
+                                            check=True, capture_output=True, timeout=30).stdout
+                    paths = sorted(set(paths) | {v for v in staged.decode("utf-8", errors="strict").split("\0") if v})
+            r = e.scan(a.root, paths) if a.input else e.git_scan(a.root, paths)
         if a.receipts:
             r["receipt"] = e.write_receipt(a.receipts, r)
     except e.Invalid as err:
