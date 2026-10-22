@@ -4,12 +4,16 @@ on:
     paths:
       - 'backend/eue-real-dallas-review.mjs'
       - 'backend/eue-real-dallas-review.test.mjs'
+      - 'backend/eue-real-dallas-private.mjs'
+      - 'backend/eue-real-dallas-private.test.mjs'
       - '.github/workflows/eue-real-dallas-review.yml'
   push:
     branches: [main]
     paths:
       - 'backend/eue-real-dallas-review.mjs'
       - 'backend/eue-real-dallas-review.test.mjs'
+      - 'backend/eue-real-dallas-private.mjs'
+      - 'backend/eue-real-dallas-private.test.mjs'
       - '.github/workflows/eue-real-dallas-review.yml'
   workflow_dispatch:
 
@@ -28,4 +32,4 @@ jobs:
         with:
           node-version: '24'
       - name: Validate isolated real-EUE consumer (no API, production service, credentials or charges)
-        run: node --test backend/eue-real-dallas-review.test.mjs
+        run: node --test backend/eue-real-dallas-review.test.mjs backend/eue-real-dallas-private.test.mjs
