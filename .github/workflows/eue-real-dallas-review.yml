@@ -1,0 +1,31 @@
+name: CERTIS governed real Dallas EUE review (offline)
+on:
+  pull_request:
+    paths:
+      - 'backend/eue-real-dallas-review.mjs'
+      - 'backend/eue-real-dallas-review.test.mjs'
+      - '.github/workflows/eue-real-dallas-review.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'backend/eue-real-dallas-review.mjs'
+      - 'backend/eue-real-dallas-review.test.mjs'
+      - '.github/workflows/eue-real-dallas-review.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-real-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Validate isolated real-EUE consumer (no API, production service, credentials or charges)
+        run: node --test backend/eue-real-dallas-review.test.mjs
