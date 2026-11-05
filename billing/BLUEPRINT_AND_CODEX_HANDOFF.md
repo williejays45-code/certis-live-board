@@ -1,4 +1,4 @@
-# CERTIS billing and credit ledger | test-mode foundation v0.1
+# CERTIS billing and credit ledger | test-mode foundation v0.2
 Date: 2026-11-05. Scope: isolated feature branch based on public GitHub main fa3fc22d9a700833630f1e43174a8e079365c860.
 Commercial status: HOLD. Public runtime, customer entitlements and payment services unchanged.
 
@@ -24,6 +24,10 @@ billing/migrations/001_certis_billing.sql:
 - financial hold if any already-consumed disputed credits require review; no auto-clear;
 - immutable Stripe event/adjustment/credit ledger rows and a wallet balance view.
 
+billing/migrations/002_membership_history.sql:
+- immutable tier and subscription change audit, replay-safe event admission and out-of-order rejection;
+- matches approved TEST price catalog rows, pre-bound Stripe customer state and signed-event journal receipts; no direct Stripe calls, payment grants or public endpoints.
+
 backend/billing-stripe-test.mjs:
 - raw-body HMAC-SHA256 Stripe-Signature verification, bounded timestamp/size, safe parsing and strict livemode=false;
 - durable PostgreSQL event journal with event-id uniqueness and payload fingerprint conflict checks;
@@ -39,12 +43,15 @@ backend/billing-foundation.test.mjs:
 - synthetic test-mode Stripe signature/invalid signature/replay/idempotency;
 - scope and no-credit grant properties;
 - SQL schema invariants, parameterized calls and prevention of accidental live setup.
-- NO live Stripe, payments, provider calls, report credits, external database or user credentials used.
+- NO live Stripe, payments, provider calls, report credits or user credentials used.
+
+billing/tests/postgres-ledger.sql and postgres-memberships.sql:
+- exercised against disposable PostgreSQL 16 via .github/workflows/billing-postgres.yml. The tests verify migration, balances, replay-safe grant/reserve/consume/release/reversal, refund hold, tier-history transitions, cancellation, out-of-order updates and append-only journal. The CI transaction rolls back fixtures.
 
 ## Important limitations (must not be confused with release readiness)
-1. The new functions are source-only. No dedicated PostgreSQL instance has been provisioned, migration applied or database backup/restore tested. Current Render inventory showed a session Redis instance, no Postgres.
-2. Schema and credit-state transitions have NOT yet passed real PostgreSQL integration/concurrency tests. Unit/static checks are not an ACID database test.
-3. Stripe test-only event receipts currently classify subscription, invoices and refunds as HELD. A new idempotent reconciliation worker must authenticate Stripe object state (including invoice payment and price/line IDs), bind a pre-provisioned customer and tier, guard out-of-order events, and call grant_credits only when plan quantities are approved.
+1. The new functions are source-only. Migration and test transitions PASSED in disposable GitHub CI PostgreSQL 16, but no dedicated hosted database has been provisioned, migrated, backed up, or restored. Current Render inventory showed a session Redis instance, no Postgres.
+2. Basic real PostgreSQL 16 transactional integration tests PASSED; multi-client concurrency, process-crash recovery, migration repeatability against preserved data and restoration tests are NOT yet complete.
+3. Stripe test-only event receipts classify subscription, invoices and refunds as HELD. A replay-safe membership transition SQL function exists but is NOT called automatically. A reconciliation worker must independently authenticate Stripe object state (invoice payment and price/line IDs), verify pre-bound customer and tier against the signed event, and grant invoice credits only when configured quantities are approved. DB sequence tests check out-of-order membership transitions, but not external Stripe state.
 4. Webhook redelivery after receipt is deliberately deduplicated. HELD events require a durable manual/worker replay procedure; do not incorrectly treat a held receipt as fulfilled.
 5. Billing amount is separate from credit quantity. No plan quantities are approved, so none are granted.
 6. The report completion adapter receives a verified hash supplied by a trusted caller; it is not independently proof that the report bytes were persisted. Implement a durable report artifact receipt and idempotent finalization cross-check.
@@ -54,7 +61,7 @@ backend/billing-foundation.test.mjs:
 
 ## Next Codex execution against THIS repository
 1. Checkout the exact feature branch and preserve main/current Render release separation and BTC 2026-10-16 historical acceptance. Read AGENTS.md, maintenance/PREVENTION.md and accepted-scopes before modifications.
-2. Run Node 24 app + policy suites; start a local isolated PostgreSQL 15+ instance (not the production store), run migration in a single transaction, and test concurrent reserve/consume/release/reversal under process crashes and duplicate requests.
+2. Reuse the already-passing GitHub CI PostgreSQL 16 migrations and lifecycle tests; extend them with actual concurrent sessions, process-crash recovery, migration repeatability and backup/restore, using an isolated instance only. Do not repeat unchanged tests merely to produce another receipt.
 3. Validate existing immutable history, source keys, customer isolation and cross-grant allocations. Add failure cases for insufficient credits, reversals after consumption, held disputes, stale price/tier updates, webhook order, duplicate invoice IDs and migration rollback.
 4. Build a TEST-MODE-ONLY Stripe reconciliation worker that reads held event IDs from PostgreSQL, independently fetches Stripe test invoice/subscription/line state with a securely provided sk_test_ key, enforces configured price IDs and approved grant amounts, preserves event lineage, and atomically grants once. No test charges are required to test synthetic webhook fixtures.
 5. Add test-only authenticated customer binding, test mode Checkout portal flow, clear subscription terms and explicit refund/cancellation/credit policy; keep fees and any live purchase gated.
@@ -62,7 +69,7 @@ backend/billing-foundation.test.mjs:
 7. Do not merge/promote until protected CI and source-to-deploy gates pass. Preserve LANDITRUS pricing. No financial execution.
 
 ## Acceptance checklist
-[ ] Verified local PostgreSQL migration and downgrade policy (without destructive deletion)
+[x] Disposable PostgreSQL 16 migrations and transactional fixture tests verified in GitHub CI; local deployment and safe downgrade policy still outstanding
 [ ] Parallel atomic reservation and exactly-once consumption
 [ ] Durable recovery/restore and report issuance reconciliation
 [ ] Stripe signed test webhooks, replay, out-of-order, partial refunds and disputes
@@ -72,4 +79,4 @@ backend/billing-foundation.test.mjs:
 [ ] Protected review/CI, staging receipt and rollback
 [ ] Production authority for launch (separate, NOT implied)
 
-No live charges, credits, cloud resources, SQL migrations or Stripe setup were executed by this source change.
+Verification: all five GitHub PR workflows PASS on 19688963ac146151bf12f0373f7b5ab04c929fc8, including PostgreSQL migration and source tests: https://github.com/williejays45-code/certis-live-board/actions/runs/42041656188 . No live charges, credits, persistent cloud resources, production SQL migrations or Stripe setup were executed by this source change.
