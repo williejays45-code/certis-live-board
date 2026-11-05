@@ -43,4 +43,10 @@ jobs:
             -f /repo/billing/migrations/001_certis_billing.sql
           docker run --rm --network host -v "$PWD:/repo:ro" postgres:16 \
             psql -X -v ON_ERROR_STOP=1 -h 127.0.0.1 -U certis_fixture -d certis_fixture \
+            -f /repo/billing/migrations/002_membership_history.sql
+          docker run --rm --network host -v "$PWD:/repo:ro" postgres:16 \
+            psql -X -v ON_ERROR_STOP=1 -h 127.0.0.1 -U certis_fixture -d certis_fixture \
             -f /repo/billing/tests/postgres-ledger.sql
+          docker run --rm --network host -v "$PWD:/repo:ro" postgres:16 \
+            psql -X -v ON_ERROR_STOP=1 -h 127.0.0.1 -U certis_fixture -d certis_fixture \
+            -f /repo/billing/tests/postgres-memberships.sql
