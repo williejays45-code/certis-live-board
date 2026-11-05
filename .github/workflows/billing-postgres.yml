@@ -1,0 +1,46 @@
+name: CERTIS isolated PostgreSQL billing ledger tests
+on:
+  pull_request:
+    paths:
+      - 'billing/**'
+      - 'backend/billing-*.mjs'
+      - '.github/workflows/billing-postgres.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'billing/**'
+      - 'backend/billing-*.mjs'
+      - '.github/workflows/billing-postgres.yml'
+permissions:
+  contents: read
+jobs:
+  postgres-ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: certis_fixture
+          POSTGRES_DB: certis_fixture
+          # Isolated disposable CI database only; never use for any production DB.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U certis_fixture -d certis_fixture"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: SQL migration, transactional state and idempotency acceptance
+        run: |
+          docker run --rm --network host -v "$PWD:/repo:ro" postgres:16 \
+            psql -X -v ON_ERROR_STOP=1 -h 127.0.0.1 -U certis_fixture -d certis_fixture \
+            -f /repo/billing/migrations/001_certis_billing.sql
+          docker run --rm --network host -v "$PWD:/repo:ro" postgres:16 \
+            psql -X -v ON_ERROR_STOP=1 -h 127.0.0.1 -U certis_fixture -d certis_fixture \
+            -f /repo/billing/tests/postgres-ledger.sql
