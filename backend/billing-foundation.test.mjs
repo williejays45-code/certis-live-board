@@ -19,7 +19,7 @@ test('signed test-mode Stripe event accepted but invoice grant never implied',()
 });
 test('signature tampering, signature replay-age and malformed headers rejected',()=>{
  const raw=make();
- for(const header of [sig(raw).replace(/.$/,'0'),'t=invalid,v1='+'a'.repeat(64),'v1='+'a'.repeat(64)])
+ for(const header of ['t='+timestamp+',v1='+'0'.repeat(64),'t=invalid,v1='+'a'.repeat(64),'v1='+'a'.repeat(64)])
   assert.throws(()=>verify(raw,header),/WEBHOOK/);
  assert.throws(()=>verifyTestWebhook(raw,sig(raw),secret,{now:()=>timestamp*1000+301000}),/WEBHOOK_EXPIRED/);
 });
