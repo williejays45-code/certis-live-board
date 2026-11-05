@@ -144,7 +144,7 @@ BEGIN
  OR p_source_key IS NULL OR length(p_source_key)<8 THEN RAISE EXCEPTION 'GRANT_INVALID'; END IF;
  SELECT id INTO g FROM credit_grants WHERE source_key=p_source_key;
  IF g IS NOT NULL THEN
-  IF NOT EXISTS(SELECT 1 FROM credit_grants WHERE id=g AND account_id=p_account AND units_total=p_units AND source_kind=p_source_kind)
+  IF NOT EXISTS(SELECT 1 FROM credit_grants WHERE id=g AND account_id=p_account AND units_total=p_units AND source_kind=p_source_kind AND expires_at IS NOT DISTINCT FROM p_expires_at)
   THEN RAISE EXCEPTION 'GRANT_IDEMPOTENCY_CONFLICT'; END IF;
   RETURN g;
  END IF;
