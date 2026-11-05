@@ -4,7 +4,7 @@ BEGIN;
 DO $$
 DECLARE
  a uuid; b uuid; g uuid; g_again uuid; r uuid; rr uuid;
- n record; conflict_seen boolean := false; prior_id text := 'evt_fixture_001';
+ n record; conflict_seen boolean := false; prior_id text := 'evt_fixture001';
 BEGIN
  IF (SELECT count(*) FROM certis_billing.plans)<>3 OR
     (SELECT count(*) FROM certis_billing.plans WHERE enabled=false AND credits_per_cycle IS NULL)<>3
